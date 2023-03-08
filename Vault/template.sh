@@ -119,6 +119,11 @@ tmp_week=${current:18:1}
 # echo $tmp_week
 
 
+# $ date -d 20230308 +"%w"
+# 3
+# $ date -d 20230308 +"%V"
+# 10
+
 case $1 in
     "Note")
         path=${current:0:8}
