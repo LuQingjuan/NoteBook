@@ -1,7 +1,4 @@
-## TODO
-## 生活
-
-## Finish
+## 2023-03-07
 ### 项目组
 原日方需求，现在的状态：
 - [x] 1112(**ok**)外部スクリプト実行時のメッセージをJenkinsコンソールに表示する(見積り)
@@ -19,11 +16,7 @@ commit：1becfbe93e7ff4eefe52c7f28eff33378ce77147
 - [x] 1113(**ok**)バッテリー残量表示のAction追加(見積り)
 - [x] 1114(**ok**)バッテリー残量表示コマンド発行でタイムアウトしてもAbortしないようにする(見積り)
 commit：5858bb491f121888c2ce7003f9bba51ff72ca5a1
-
-
 ---
-## 2023-03-09
-
 ## 2023-03-08
 ### 项目组
 今連絡しようとしていました。CI#1系を使用してもらって大丈夫です。(今から使ってもらって大丈夫です。)環境は10.38.223.151の以下のパスにあるconfig.iniのままで大丈夫とのことです。/home/l5g/CI_Config/CI1 先週確認してもらった、以下の2件について本番のブランチ(L5G_ST_CI1)にマージして動作確認をしてほしいです。　
@@ -87,3 +80,29 @@ SourceCodePath =
 XmlFile = xml_files/lu_test_case_0.xml,xml_files/lu_test_case_2.xml
 ----------------------------------------------------------------------------
 ```
+---
+## 2023-03-09
+---
+### NoteBook 项目
+- [x] NoteBook template工具，shell脚本变更为python
+  * 原因：IOS Code app可以执行python脚本
+---
+## 2023-03-10
+### 项目组
+#### TODO
+##### L5G CI
+- [x] L5G CI 同时查看手机电池和CPU温度
+    xml中`UE_Battery_Temperature`变为`UE_Temperature`
+    ```
+    branch:L5G_CI_develop
+    commit:66c835966a5269d8c43e2cee54d47e6a70509d22
+    ```
+    - [ ] 验证命令`adb -s ' + device_id + ' shell dmesg | grep temperature | awk '{print $6}'`
+    - [ ] 验证机能
+- [x] L5G CI 查看手机电量、电池和CPU温度的时候，如果结果获取失败，显示命令执行的输出信息
+    ```
+    branch:L5G_CI_develop
+    commit:d5007fdd949219160aa63d066366c91c477dcfec
+    ```
+    - [ ] 验证机能
+#### finish
