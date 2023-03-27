@@ -6,5 +6,5 @@
 
 ## DIKW模型
 
-![](DIKW模型.jpg)
+![](image/DIKW模型.jpg)
 
