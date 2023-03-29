@@ -3,9 +3,6 @@
 #### L5G CI 
 ### NoteBook 项目
 ### 生活
-### 结婚
-- [ ] 通知化妆师（周周）时间和房间号
-![[AllTodoList#2023-03-10#TODO]]
 ---
 ## 2023-03-07
 ### 项目组
@@ -115,3 +112,65 @@ XmlFile = xml_files/lu_test_case_0.xml,xml_files/lu_test_case_2.xml
     ```
     - [ ] 验证机能
 #### finish
+- [x] 通知化妆师（周周）时间和房间号
+## 2023-03-27
+### 云奥
+#### TODO
+* 周新宇压力大，想换项目。
+  - [x] 给赵敏换人（不换了）
+    * 闫辰泽替换 4/15可以抽出。
+    * JFTT内部可以解决
+  - [x] 确定周新宇去留
+    * 劝退 3/29
+
+### Note
+- [x] [[SAI#SAI|SAI]]
+- [x] [[ASIC#ASIC|ASIC]]
+
+---
+## 2023-03-28
+### Note
+- [x] [[SWSS#SWSS|SWSS]]
+- [x] [[syncd#syncd|syncd]]
+- [x] [[FPGA#FPGA|FPGA]]
+- [x] [[ONL#ONL|ONL]]
+
+---
+## 2023-03-29
+### TODO
+- [ ] ![[SONiC#SONiC|SONiC]]
+#### AWS
+- [ ] ![[Amazon EC2#Amazon EC2|Amazon EC2]]
+- [ ] ![[Amazon ECR#Amazon ECR|Amazon ECR]]
+- [ ] ![[Amazon ECS#Amazon ECS|Amazon ECS]]
+- [ ] ![[AWS Elastic Beamstalk#AWS Elastic Beamstalk|AWS Elastic Beamstalk]]
+- [ ] ![[AWS Lambda#AWS Lambda|AWS Lambda]]
+- [ ] ![[Elastic Load Balancing#Elastic Load Balancing|Elastic Load Balancing]]
+- [ ] ![[Amazon CloudFront#Amazon CloudFront|Amazon CloudFront]]
+- [ ] ![[Amazon Kinesis#Amazon Kinesis|Amazon Kinesis]]
+- [ ] ![[Amazon Route 53#Amazon Route 53|Amazon Route 53]]
+- [ ] ![[Amazon S3#Amazon S3|Amazon S3]]
+- [ ] ![[Amazon RDS#Amazon RDS|Amazon RDS]]
+- [ ] ![[Amazon Aurora#Amazon Aurora|Amazon Aurora]]
+- [ ] ![[Amazon DynamoDB#Amazon DynamoDB|Amazon DynamoDB]]
+- [ ] ![[Amazon ElasticCache#Amazon ElasticCache|Amazon ElasticCache]]
+- [ ] ![[Amazon SQS#Amazon SQS|Amazon SQS]]
+- [ ] ![[Amazon SNS#Amazon SNS|Amazon SNS]]
+- [ ] ![[AWS Step Functions#AWS Step Functions|AWS Step Functions]]
+- [ ] ![[Auto Scaling#Auto Scaling|Auto Scaling]]
+- [ ] ![[Amazon API Gateway#Amazon API Gateway|Amazon API Gateway]]
+- [ ] ![[Amazon SES#Amazon SES|Amazon SES]]
+- [ ] ![[Amazon Cognito#Amazon Cognito|Amazon Cognito]]
+- [ ] ![[IAM#IAM|IAM]]
+- [ ] ![[Amazon CloudWatch#Amazon CloudWatch|Amazon CloudWatch]]
+- [ ] ![[Amazon EC2 Systems Manager#Amazon EC2 Systems Manager|Amazon EC2 Systems Manager]]
+- [ ] ![[AWS CloudFormation#AWS CloudFormation|AWS CloudFormation]]
+- [ ] ![[AWS CloudTrail#AWS CloudTrail|AWS CloudTrail]]
+- [ ] ![[AWS CodeCommit#AWS CodeCommit|AWS CodeCommit]]
+- [ ] ![[AWS CodeBuild#AWS CodeBuild|AWS CodeBuild]]
+- [ ] ![[AWS CodeDeploy#AWS CodeDeploy|AWS CodeDeploy]]
+- [ ] ![[AWS CodePipline#AWS CodePipline|AWS CodePipline]]
+- [ ] ![[AWS X-Ray#AWS X-Ray|AWS X-Ray]]
+- [ ] ![[AWS KMS#AWS KMS|AWS KMS]]
+- [ ] ![[AWS KMS#AWS KMS|AWS KMS]]
+---
