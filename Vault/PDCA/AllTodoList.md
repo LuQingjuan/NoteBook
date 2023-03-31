@@ -94,28 +94,9 @@ XmlFile = xml_files/lu_test_case_0.xml,xml_files/lu_test_case_2.xml
   * 原因：IOS Code app可以执行python脚本
 ---
 ## 2023-03-10
-### 项目组
-#### TODO
-##### L5G CI
-- [x] L5G CI 同时查看手机电池和CPU温度
-    xml中`UE_Battery_Temperature`变为`UE_Temperature`
-    ```
-    branch:L5G_CI_develop
-    commit:66c835966a5269d8c43e2cee54d47e6a70509d22
-    ```
-    - [ ] 验证命令`adb -s ' + device_id + ' shell dmesg | grep temperature | awk '{print $6}'`
-    - [ ] 验证机能
-- [x] L5G CI 查看手机电量、电池和CPU温度的时候，如果结果获取失败，显示命令执行的输出信息
-    ```
-    branch:L5G_CI_develop
-    commit:d5007fdd949219160aa63d066366c91c477dcfec
-    ```
-    - [ ] 验证机能
-#### finish
 - [x] 通知化妆师（周周）时间和房间号
 ## 2023-03-27
 ### 云奥
-#### TODO
 * 周新宇压力大，想换项目。
   - [x] 给赵敏换人（不换了）
     * 闫辰泽替换 4/15可以抽出。
@@ -137,40 +118,12 @@ XmlFile = xml_files/lu_test_case_0.xml,xml_files/lu_test_case_2.xml
 
 ---
 ## 2023-03-29
-### TODO
-- [ ] ![[SONiC#SONiC|SONiC]]
 #### AWS
-- [ ] ![[Amazon EC2#Amazon EC2|Amazon EC2]]
-- [ ] ![[Amazon ECR#Amazon ECR|Amazon ECR]]
-- [ ] ![[Amazon ECS#Amazon ECS|Amazon ECS]]
-- [ ] ![[AWS Elastic Beamstalk#AWS Elastic Beamstalk|AWS Elastic Beamstalk]]
-- [ ] ![[AWS Lambda#AWS Lambda|AWS Lambda]]
-- [ ] ![[Elastic Load Balancing#Elastic Load Balancing|Elastic Load Balancing]]
-- [ ] ![[Amazon CloudFront#Amazon CloudFront|Amazon CloudFront]]
-- [ ] ![[Amazon Kinesis#Amazon Kinesis|Amazon Kinesis]]
-- [ ] ![[Amazon Route 53#Amazon Route 53|Amazon Route 53]]
-- [ ] ![[Amazon S3#Amazon S3|Amazon S3]]
-- [ ] ![[Amazon RDS#Amazon RDS|Amazon RDS]]
-- [ ] ![[Amazon Aurora#Amazon Aurora|Amazon Aurora]]
-- [ ] ![[Amazon DynamoDB#Amazon DynamoDB|Amazon DynamoDB]]
-- [ ] ![[Amazon ElasticCache#Amazon ElasticCache|Amazon ElasticCache]]
-- [ ] ![[Amazon SQS#Amazon SQS|Amazon SQS]]
-- [ ] ![[Amazon SNS#Amazon SNS|Amazon SNS]]
-- [ ] ![[AWS Step Functions#AWS Step Functions|AWS Step Functions]]
-- [ ] ![[Auto Scaling#Auto Scaling|Auto Scaling]]
-- [ ] ![[Amazon API Gateway#Amazon API Gateway|Amazon API Gateway]]
-- [ ] ![[Amazon SES#Amazon SES|Amazon SES]]
-- [ ] ![[Amazon Cognito#Amazon Cognito|Amazon Cognito]]
-- [ ] ![[IAM#IAM|IAM]]
-- [ ] ![[Amazon CloudWatch#Amazon CloudWatch|Amazon CloudWatch]]
-- [ ] ![[Amazon EC2 Systems Manager#Amazon EC2 Systems Manager|Amazon EC2 Systems Manager]]
-- [ ] ![[AWS CloudFormation#AWS CloudFormation|AWS CloudFormation]]
-- [ ] ![[AWS CloudTrail#AWS CloudTrail|AWS CloudTrail]]
-- [ ] ![[AWS CodeCommit#AWS CodeCommit|AWS CodeCommit]]
-- [ ] ![[AWS CodeBuild#AWS CodeBuild|AWS CodeBuild]]
-- [ ] ![[AWS CodeDeploy#AWS CodeDeploy|AWS CodeDeploy]]
-- [ ] ![[AWS CodePipline#AWS CodePipline|AWS CodePipline]]
-- [ ] ![[AWS X-Ray#AWS X-Ray|AWS X-Ray]]
-- [ ] ![[AWS KMS#AWS KMS|AWS KMS]]
-- [ ] ![[AWS KMS#AWS KMS|AWS KMS]]
+- [x] [[IAM#IAM|IAM]]
+
+---
+## 2023-03-30
+### Note
+- [x] [[MFA#MFA|MFA]]
+### TODO
 ---

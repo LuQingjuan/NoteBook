@@ -42,6 +42,13 @@ syncd 容器
   * 2) zebra：传统的IP路由管理器。它提供内核路由表更新、接口查找和跨各种路由协议的路由重新分配服务。zebra还通过netlink将计算出的FIB向下推送到内核，并通过转发平面管理器（FPM）推送到转发过程中涉及的南向组件。
   * 3) fpmsyncd：此服务收集zebra生成的FIB状态，并将其内容转储到redis引擎内的应用程序数据库（APPL_DB）中。
 
+|      |                                    |                                  |
+| ---- | ---------------------------------- | -------------------------------- |
+| SWSS | SWitch State Service               |                                  |
+| LLDP | Link Layer Discovery Protocol      | 链路层发现协议                   |
+| SNMP | Simple Network Management Protocol | 简单网络管理协议                 |
+| PMON | Process MONitor                    | 进程监视器；进程管理器；进程监控 |
+| BGP  | Border Gateway Protocol            | 即边界网关协议                   |
 
 ## 参考资料
 * [SONiC架构分析](https://bbs.huaweicloud.com/blogs/303604)

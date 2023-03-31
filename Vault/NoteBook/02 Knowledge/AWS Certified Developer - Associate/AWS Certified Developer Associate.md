@@ -160,16 +160,6 @@ AWS在线课堂：
 
 # 学习笔记
 
-## 英语词汇整理
-
-| 缩写   | 全称                            |                                                                                            |
-| ------ | ------------------------------- | ------------------------------------------------------------------------------------------ |
-| AWS    | Amazon Web Services             |                                                                                            |
-| IaaS   | Infrastructure as a Service     | 基础设施即服务                                                                             |
-| PaaS   | Platform as a Service           | 平台即服务一般                                                                             |
-| SaaS   | Software as a Service           | 软件即服务                                                                                 |
-| DevOps | Development和Operations的组合词 | 开发运维一体化:是一种重视“软件开发人员（Dev）”和“IT运维技术人员（Ops）”之间**沟通合作**的文化、运动或惯例 |
-
 ## AWS的主要服务
 
 * 计算
@@ -257,3 +247,51 @@ Elastic Beanstalk 支持 Java、.NET、PHP、Node.js、Python、Ruby、Go 和 Do
 ## Getting Started with DevOps on AWS
 ## Build and Deploy APIs with a Serverless CI/CD
 ## Exam Readiness: AWS Certified Developer – Associate (Digital)
+
+
+
+# 笔记
+
+## 30 AWS services
+- [x] ![[IAM#IAM|IAM]] P19
+- [ ] ![[Amazon EC2#Amazon EC2|Amazon EC2]] P37
+- [ ] EC2 Instance Storage Section P70
+- [ ] [[abbr#AWS#IAM|IAM]]
+
+
+
+
+- [ ] [[AWS CloudFormation#AWS CloudFormation|AWS CloudFormation]]
+- [ ] [[AWS CloudTrail#AWS CloudTrail|AWS CloudTrail]]
+- [ ] [[AWS CodeBuild#AWS CodeBuild|AWS CodeBuild]]
+- [ ] [[AWS CodeCommit#AWS CodeCommit|AWS CodeCommit]]
+- [ ] [[AWS CodeDeploy#AWS CodeDeploy|AWS CodeDeploy]]
+- [ ] [[AWS CodePipline#AWS CodePipline|AWS CodePipline]]
+- [ ] [[AWS Elastic Beamstalk#AWS Elastic Beamstalk|AWS Elastic Beamstalk]]
+- [ ] [[AWS KMS#AWS KMS|AWS KMS]]
+- [ ] [[AWS Lambda#AWS Lambda|AWS Lambda]]
+- [ ] [[AWS Step Functions#AWS Step Functions|AWS Step Functions]]
+- [ ] [[AWS X-Ray#AWS X-Ray|AWS X-Ray]]
+- [ ] [[Amazon API Gateway#Amazon API Gateway|Amazon API Gateway]]
+- [ ] [[Amazon Aurora#Amazon Aurora|Amazon Aurora]]
+- [ ] [[Amazon CloudFront#Amazon CloudFront|Amazon CloudFront]]
+- [ ] [[Amazon CloudWatch#Amazon CloudWatch|Amazon CloudWatch]]
+- [ ] [[Amazon Cognito#Amazon Cognito|Amazon Cognito]]
+- [ ] [[Amazon DynamoDB#Amazon DynamoDB|Amazon DynamoDB]]
+- [ ] [[Amazon EC2 Systems Manager#Amazon EC2 Systems Manager|Amazon EC2 Systems Manager]]
+- [ ] [[Amazon EC2#Amazon EC2|Amazon EC2]]
+- [ ] [[Amazon ECR#Amazon ECR|Amazon ECR]]
+- [ ] [[Amazon ECS#Amazon ECS|Amazon ECS]]
+- [ ] [[Amazon ElasticCache#Amazon ElasticCache|Amazon ElasticCache]]
+- [ ] [[Amazon Kinesis#Amazon Kinesis|Amazon Kinesis]]
+- [ ] [[Amazon RDS#Amazon RDS|Amazon RDS]]
+- [ ] [[Amazon Route 53#Amazon Route 53|Amazon Route 53]]
+- [ ] [[Amazon S3#Amazon S3|Amazon S3]]
+- [ ] [[Amazon SES#Amazon SES|Amazon SES]]
+- [ ] [[Amazon SNS#Amazon SNS|Amazon SNS]]
+- [ ] [[Amazon SQS#Amazon SQS|Amazon SQS]]
+- [ ] [[Auto Scaling#Auto Scaling|Auto Scaling]]
+- [ ] [[CLI#CLI|CLI]]
+- [ ] [[Elastic Load Balancing#Elastic Load Balancing|Elastic Load Balancing]]
+- [ ] [[IAM#IAM|IAM]]
+- [ ] [[SDK#SDK|SDK]]
