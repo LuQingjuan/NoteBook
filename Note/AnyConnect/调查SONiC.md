@@ -1,2 +1,0 @@
-
-![[SONiC#SONiC|SONiC]]

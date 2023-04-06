@@ -221,8 +221,8 @@ class Template():
 	def Create_Todo_File(self):
 		self.Create_Template("TodoList.md", self.Todo_Template())
 
-	def Create_Note_File(self, topic):
-		os.chdir("NoteBook")
+	def Create_Note_File(self, subject, topic):
+		os.chdir(subject)
 		os.chdir("01 Note")
 		self.Create_Template(topic + ".md", self.Note_Template(topic))
 		os.chdir("..")
@@ -249,8 +249,9 @@ class Template():
 def Usage():
     print("---------------------------------------------------")
     print("               Usage")
+    print("python3 ./template.py --mode=Show --type=Subject")
     print("python3 ./template.py --mode=Temp --type=Todo")
-    print("                                  --type=Note --topic=[Topic]")
+    print("python3 ./template.py --mode=Temp --type=Note --subject=[] --topic=[Topic]")
     print("                                  --type=Day")
     print("                                  --type=Week")
     print("                                  --type=Month")
@@ -265,6 +266,7 @@ if __name__ == '__main__':
 	temp = Template()
 	todo = TodoAction()
 
+	subject = ""
 	while len(argvs) > 1:
 		myArgv = argvs.pop(1)	# 0th is this file's name
 		if re.match('^\-\-help$', myArgv, re.IGNORECASE):
@@ -276,16 +278,25 @@ if __name__ == '__main__':
 		elif re.match('^\-\-type=(.+)$', myArgv, re.IGNORECASE):
 			matchReg = re.match('^\-\-type=(.+)$', myArgv, re.IGNORECASE)
 			type = matchReg.group(1)
+		elif re.match('^\-\-subject=(.+)$', myArgv, re.IGNORECASE):
+			matchReg = re.match('^\-\-subject=(.+)$', myArgv, re.IGNORECASE)
+			subject = matchReg.group(1)
 		elif re.match('^\-\-topic=(.+)$', myArgv, re.IGNORECASE):
 			matchReg = re.match('^\-\-topic=(.+)$', myArgv, re.IGNORECASE)
 			topic = matchReg.group(1)
 
-	if mode == "Temp":
+	if mode == "Show":
+		if type == "Subject":
+			for filename in os.listdir("."):
+				if (not os.path.isfile(filename) and '.' != filename[0]):
+					print(filename)
+					
+	elif mode == "Temp":
 		if type == "Todo":
 			temp.Create_Todo_File()
 		elif type == "Note":
-			temp.Create_Note_File(topic)
-			todo.Note_Insert_To_Todo_List(topic)
+			temp.Create_Note_File(subject, topic)
+			todo.Note_Insert_To_Todo_List(subject, topic)
 		elif type == "Day":
 			temp.Create_Day_File()
 		elif type == "Week":
