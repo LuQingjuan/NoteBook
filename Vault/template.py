@@ -38,12 +38,17 @@ class NotUSE():
 
 class TodoAction():
 	def __init__(self):
-		pass
+		current = datetime.today()
+		self.date = str(current)[:10]
 
 	def Recursion_Insert_Data(self, src_lines, topic_id, topic_arr, info):
 		topic = topic_arr[0]
-		topic_flag = " ".rjust(topic_id+4, "#")
-		tmp_src_lines = []
+		next_topic_arr = topic_arr[1:]
+		print(str(len(topic_arr))+":"+topic+" "+str(next_topic_arr))
+
+		topic_flag = " ".rjust(topic_id+3, "#")
+		topic_flag_len = len(topic_flag)
+		next_src_lines = []
 
 		write_flag = False
 		search_flag = False
@@ -54,25 +59,25 @@ class TodoAction():
 					if line == topic_flag + topic + "\n":
 						search_flag = True
 				elif search_flag:
-					if line[:len(topic_flag)] != topic_flag:
-						tmp_src_lines.append(line)
-					if line[:len(topic_flag)] == topic_flag:
+					if line[:topic_flag_len] != topic_flag:
+						next_src_lines.append(line)
+					if line[:topic_flag_len] == topic_flag:
 						write_flag = True
-						if 0 == len(topic_arr[1:]):
+						if 0 == len(next_topic_arr):
 							update_info = update_info + info + "\n"
 						else:
-							update_info = update_info + self.Recursion_Insert_Data(tmp_src_lines, topic_id+1, topic_arr[1:], info)
+							update_info = update_info + self.Recursion_Insert_Data(next_src_lines, topic_id+1, next_topic_arr, info)
 			update_info = update_info + line
 
 		if write_flag == False:
 			if search_flag == False:
-				if 0 == len(topic_arr[1:]):
-					update_info = update_info + topic_flag + topic + "\n" + info + "\n"
-				else:
-					update_info = update_info + topic_flag + topic + "\n"
-					update_info = update_info + self.Recursion_Insert_Data(tmp_src_lines, topic_id+1, topic_arr[1:], info)
-			else:
+				update_info = update_info + topic_flag + topic + "\n"
+
+			if 0 == len(next_topic_arr):
 				update_info = update_info + info + "\n"
+			else:
+				update_info = update_info + self.Recursion_Insert_Data(next_src_lines, topic_id+1, next_topic_arr, info)
+
 		return update_info
 
 	def Insert_To_Todo_List_common(self, topic_arr, info):
@@ -92,8 +97,8 @@ class TodoAction():
 				w_file.close( )
 
 	#-----------------------------------------------------------------------------------
-	def Note_Insert_To_Todo_List(self, topic):
-		self.Insert_To_Todo_List_common(["Note"], "- [ ] ![[" + topic + "#" + topic + "|" + topic + "]]")
+	def Note_Insert_To_Todo_List(self, subject, topic):
+		self.Insert_To_Todo_List_common([self.date, "TODO", subject, "Note"], "- [ ] ![[" + topic + "#" + topic + "|" + topic + "]]")
 
 class Template():
 	def __init__(self):
@@ -109,105 +114,57 @@ class Template():
 		#print(self.week)
 		#print(str(self.week_count))
 
-	def Todo_Template(self):
-		os.chdir("PDCA")
-		todo_info = ""
-		todo_file = open("AllTodoList.md", 'r')
-		try:
-			line = ""
-			while line != "---\n":
-				line = todo_file.readline()
-				todo_info = todo_info + line
-		finally:
-			todo_file.close()
-		os.chdir("..")
+	def Get_Template_Info_Common(self, template_file):
+		src_info = ""
+		with open(template_file, "r", encoding="utf-8") as r_fp:
+			src_info = r_fp.readlines()
+		return src_info
 
-		todo_info = todo_info + "\
-## " + self.date + "\n\
-\n\
-\n\
-### Note\n"
-		return todo_info
+	def Todo_Template(self):
+		src_info = self.Get_Note_Template_Info()
+		if "${date_time}" in src_info:
+			src_info = re.sub(r"${date_time}", self.date, src_info)
+		return src_info
 
 	def Note_Template(self, topic):
-		date_time = self.date + " " + self.time
-		return "\
-* Type:\n\
-* Tags:\n\
-* Date: " + date_time + "\n\
-* Related:\n\
-* Reference:[]()\n\
-\n\
-## " + topic + "\n"
+		os.chdir(".Template")
+		src_info = self.Get_Template_Info_Common("note.md")
+		os.chdir("..")
+
+		if "${topic}" in src_info:
+			src_info = re.sub(r"${topic}", topic, src_info)
+		return src_info
 
 	def Day_Template(self):
-		return "\
-## Detail\n\
-![[AllTodoList#" + self.date + "|" + self.date + "]]\n\
-\n\
-## 日复盘\n\
-\n\
-### 活动执行过程\n\
-* 这样很好\n\
-    1. \n\
-\n\
-* 可以提升\n\
-    1. \n\
-\n\
-### 其他人处理方式\n\
-* 值得学习\n\
-    1. \n\
-\n\
-* 自己避免\n\
-    1. \n\
-\n\
-### 自我评价\n\
-* 棒棒的\n\
-    1. \n\
-\n\
-* 调整下\n\
-    1. \n\
-\n"
+		os.chdir(".Template")
+		src_info = self.Get_Template_Info_Common("note.md")
+		os.chdir("..")
+		return src_info
 
 	def Week_Template(self):
-		return "\
-## 周复盘\n\
-\n\
-## Detail\n\
-#### Work\n\
-* \n\
-#### Study\n\
-* \n"
+		os.chdir(".Template")
+		src_info = self.Get_Template_Info_Common("note.md")
+		os.chdir("..")
+		return src_info
 
 	def Month_Template(self):
-		return "\
-## 月度复盘\n\
-\n\
-## Detail\n\
-#### Work\n\
-* \n\
-#### Study\n\
-* \n"
+		os.chdir(".Template")
+		src_info = self.Get_Template_Info_Common("note.md")
+		os.chdir("..")
+		return src_info
 
 	def Quarter_Template(self):
-		return "\
-## 季度复盘\n\
-\n\
-## Detail\n\
-#### Work\n\
-* \n\
-#### Study\n\
-* \n"
+		os.chdir(".Template")
+		src_info = self.Get_Template_Info_Common("note.md")
+		os.chdir("..")
+		return src_info
 
 	def Year_Template(self):
-		return "\
-## 年度复盘\n\
-\n\
-## Detail\n\
-#### Work\n\
-* \n\
-#### Study\n\
-* \n"
+		os.chdir(".Template")
+		src_info = self.Get_Template_Info_Common("note.md")
+		os.chdir("..")
+		return src_info
+
 	#-----------------------------------------------------
 
 	def Create_Template(self, file_name, template):
@@ -250,8 +207,8 @@ def Usage():
     print("---------------------------------------------------")
     print("               Usage")
     print("python3 ./template.py --mode=Show --type=Subject")
-    print("python3 ./template.py --mode=Temp --type=Todo")
     print("python3 ./template.py --mode=Temp --type=Note --subject=[] --topic=[Topic]")
+    print("                                  --type=Todo")
     print("                                  --type=Day")
     print("                                  --type=Week")
     print("                                  --type=Month")
