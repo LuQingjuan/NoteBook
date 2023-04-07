@@ -114,55 +114,44 @@ class Template():
 		#print(self.week)
 		#print(str(self.week_count))
 
-	def Get_Template_Info_Common(self, template_file):
+	def Get_Template_Info_Common(self):
 		src_info = ""
-		with open(template_file, "r", encoding="utf-8") as r_fp:
+		with open(".template.md", "r", encoding="utf-8") as r_fp:
 			src_info = r_fp.readlines()
 		return src_info
 
-	def Todo_Template(self):
-		src_info = self.Get_Note_Template_Info()
-		if "${date_time}" in src_info:
-			src_info = re.sub(r"${date_time}", self.date, src_info)
+	def Todo_Template(self, thing):
+		src_info = "- [ ] " + thing
 		return src_info
 
 	def Note_Template(self, topic):
-		os.chdir(".Template")
-		src_info = self.Get_Template_Info_Common("note.md")
-		os.chdir("..")
+		src_info = self.Get_Template_Info_Common()
 
+		if "${date_time}" in src_info:
+			src_info = re.sub(r"${date_time}", self.date, src_info)
 		if "${topic}" in src_info:
 			src_info = re.sub(r"${topic}", topic, src_info)
+
 		return src_info
 
 	def Day_Template(self):
-		os.chdir(".Template")
-		src_info = self.Get_Template_Info_Common("note.md")
-		os.chdir("..")
+		src_info = self.Get_Template_Info_Common()
 		return src_info
 
 	def Week_Template(self):
-		os.chdir(".Template")
-		src_info = self.Get_Template_Info_Common("note.md")
-		os.chdir("..")
+		src_info = self.Get_Template_Info_Common()
 		return src_info
 
 	def Month_Template(self):
-		os.chdir(".Template")
-		src_info = self.Get_Template_Info_Common("note.md")
-		os.chdir("..")
+		src_info = self.Get_Template_Info_Common()
 		return src_info
 
 	def Quarter_Template(self):
-		os.chdir(".Template")
-		src_info = self.Get_Template_Info_Common("note.md")
-		os.chdir("..")
+		src_info = self.Get_Template_Info_Common()
 		return src_info
 
 	def Year_Template(self):
-		os.chdir(".Template")
-		src_info = self.Get_Template_Info_Common("note.md")
-		os.chdir("..")
+		src_info = self.Get_Template_Info_Common()
 		return src_info
 
 	#-----------------------------------------------------
@@ -175,14 +164,12 @@ class Template():
 			file.close( )
 	#-----------------------------------------------------
 
-	def Create_Todo_File(self):
-		self.Create_Template("TodoList.md", self.Todo_Template())
+	def Create_Todo_File(self, thing):
+		self.Create_Template("TodoList.md", self.Todo_Template(thing))
 
-	def Create_Note_File(self, subject, topic):
-		os.chdir(subject)
+	def Create_Note_File(self, topic):
 		os.chdir("01 Note")
 		self.Create_Template(topic + ".md", self.Note_Template(topic))
-		os.chdir("..")
 		os.chdir("..")
 
 	def Create_Day_File(self):
@@ -207,8 +194,8 @@ def Usage():
     print("---------------------------------------------------")
     print("               Usage")
     print("python3 ./template.py --mode=Show --type=Subject")
-    print("python3 ./template.py --mode=Temp --type=Note --subject=[] --topic=[Topic]")
-    print("                                  --type=Todo")
+    print("python3 ./template.py --mode=Add --type=Todo --thing=[Thing]")
+    print("python3 ./template.py --mode=Add --type=Note --subject=[] --topic=[Topic]")
     print("                                  --type=Day")
     print("                                  --type=Week")
     print("                                  --type=Month")
@@ -235,6 +222,9 @@ if __name__ == '__main__':
 		elif re.match('^\-\-type=(.+)$', myArgv, re.IGNORECASE):
 			matchReg = re.match('^\-\-type=(.+)$', myArgv, re.IGNORECASE)
 			type = matchReg.group(1)
+		elif re.match('^\-\-thing=(.+)$', myArgv, re.IGNORECASE):
+			matchReg = re.match('^\-\-thing=(.+)$', myArgv, re.IGNORECASE)
+			thing = matchReg.group(1)
 		elif re.match('^\-\-subject=(.+)$', myArgv, re.IGNORECASE):
 			matchReg = re.match('^\-\-subject=(.+)$', myArgv, re.IGNORECASE)
 			subject = matchReg.group(1)
@@ -247,14 +237,16 @@ if __name__ == '__main__':
 			for filename in os.listdir("."):
 				if (not os.path.isfile(filename) and '.' != filename[0]):
 					print(filename)
-					
-	elif mode == "Temp":
+	elif mode == "Add":
 		if type == "Todo":
-			temp.Create_Todo_File()
+			temp.Create_Todo_File(thing)
 		elif type == "Note":
-			temp.Create_Note_File(subject, topic)
+			os.chdir(subject)
+			temp.Create_Note_File(topic)
+			os.chdir("..")
 			todo.Note_Insert_To_Todo_List(subject, topic)
-		elif type == "Day":
+	elif mode == "PDCA":
+		if type == "Day":
 			temp.Create_Day_File()
 		elif type == "Week":
 			temp.Create_Week_File()
