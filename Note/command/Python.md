@@ -85,8 +85,9 @@ print(pip._internal.pep425tags.get_supported())`
 * 生成新PDF文件classes.pdf
 `dot -Tpdf classes.dot -o classes.pdf`
 eg:
-`$ pyreverse.exe criticallog.py ems.py innerlog.py iperf.py main.py ping.py SSHClass.py syslog.py ttl_ssh.py ueaction.py docker_ems.py`
-`$ dot -Tpdf classes.dot -o L5GC_CI2_dev_b71d1576f9c0e20c7d4336f8d9af8b64a7e57e00.pdf`
+`$ pyreverse.exe SSHClass.py  criticallog.py  ems.py  ems_pyautogui.py  ems_selenium.py  innerlog.py  iperf.py  main.py  ping.py  simnovator.py  syslog.py  ttl_ssh.py  ueaction.py`
+`$ dot -Tpdf classes.dot -o class_L5GC_CI2_dev_6a2dbc32b26ea31fece3b33a93fa81e88cb9a845.pdf`
+`$ dot -Tpdf packages.dot -o packages_L5GC_CI2_dev_6a2dbc32b26ea31fece3b33a93fa81e88cb9a845.pdf`
 
 * 命令行方式(没有尝试)
 `pyreverse -o png -p Pyreverse pylint/pyreverse/`
@@ -126,14 +127,70 @@ eg:
 *  命令行方式
 `pyan3.exe *.py --uses --no-defines --colored --grouped --annotated --dot >myuses.dot`
 `dot -Tsvg myuses.dot >myuses.svg`
+`dot -Tpng Python/classes.dot >aa.png`
+`dot -Tpdf classes.dot -o classes.pdf`
 eg:
 `pyan3.exe SSHClass.py                        --uses --no-defines --colored --grouped --annotated --dot >SSHClass.dot`
-`pyan3.exe criticallog.py docker_ems.py ems.py innerlog.py iperf.py main.py ping.py syslog.py ttl_ssh.py ueaction.py --uses --no-defines --colored --grouped --annotated --dot >functionuses.dot`
+`pyan3.exe SSHClass.py  criticallog.py  ems.py  ems_pyautogui.py  ems_selenium.py  innerlog.py  iperf.py  main.py  ping.py  simnovator.py  syslog.py  ttl_ssh.py  ueaction.py --uses --no-defines --colored --grouped --annotated --dot >functionuses.dot`
 
 <b>参考资料</b>
 * [Python中动态与静态 Call Graph（调用关系图）分析工具](https://zhuanlan.zhihu.com/p/108481835
 )
 
+---
+### 解析L5GC_CI代码
+branch：L5GC_CI2_dev
+commit：6a2dbc32b26ea31fece3b33a93fa81e88cb9a845
+**WSL**
+
+#### classes.png
+
+cd Python/
+
+ls *.py
+SSHClass.py  criticallog.py  ems.py  ems_pyautogui.py  ems_selenium.py  innerlog.py  iperf.py  main.py  ping.py  simnovator.py  syslog.py  ttl_ssh.py  ueaction.py  useless_dstat.py
+
+pyreverse.exe SSHClass.py  criticallog.py  ems.py  ems_pyautogui.py  ems_selenium.py  innerlog.py  iperf.py  main.py  ping.py  simnovator.py  syslog.py  ttl_ssh.py  ueaction.py;    dot -Tpng classes.dot >UML.png
+
+
+#### **.png
+ls -l *.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 14567 Apr 10 10:47 Python/SSHClass.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 13238 Apr 10 10:46 Python/criticallog.py
+-rwxrwxrwx 1 luqingjuan luqingjuan  7282 Apr 10 10:46 Python/ems.py
+-rwxrwxrwx 1 luqingjuan luqingjuan  1469 Apr 10 10:46 Python/ems_pyautogui.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 33686 Apr 10 10:46 Python/ems_selenium.py
+-rwxrwxrwx 1 luqingjuan luqingjuan  9603 Apr 10 10:46 Python/innerlog.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 35391 Apr 10 10:46 Python/iperf.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 88051 Apr 10 10:47 Python/main.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 15193 Apr 10 10:46 Python/ping.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 16258 Apr 10 11:01 Python/simnovator.py
+-rwxrwxrwx 1 luqingjuan luqingjuan  8657 Apr 10 10:46 Python/syslog.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 14973 Apr 10 10:46 Python/ttl_ssh.py
+-rwxrwxrwx 1 luqingjuan luqingjuan 14777 Apr 10 10:47 Python/ueaction.py
+
+
+pyan3.exe SSHClass.py --uses --no-defines --colored --grouped --annotated --dot >SSHClass.dot;    dot -Tpng SSHClass.dot >SSHClass.png
+pyan3.exe criticallog.py --uses --no-defines --colored --grouped --annotated --dot >criticallog.dot;    dot -Tpng criticallog.dot >criticallog.png
+pyan3.exe ems.py --uses --no-defines --colored --grouped --annotated --dot >ems.dot;    dot -Tpng ems.dot >ems.png
+pyan3.exe ems_pyautogui.py --uses --no-defines --colored --grouped --annotated --dot >ems_pyautogui.dot;    dot -Tpng ems_pyautogui.dot >ems_pyautogui.png
+pyan3.exe ems_selenium.py --uses --no-defines --colored --grouped --annotated --dot >ems_selenium.dot;    dot -Tpng ems_selenium.dot >ems_selenium.png
+pyan3.exe innerlog.py --uses --no-defines --colored --grouped --annotated --dot >innerlog.dot;    dot -Tpng innerlog.dot >innerlog.png
+pyan3.exe iperf.py --uses --no-defines --colored --grouped --annotated --dot >iperf.dot;    dot -Tpng iperf.dot >iperf.png
+pyan3.exe main.py --uses --no-defines --colored --grouped --annotated --dot >main.dot;    dot -Tpng main.dot >main.png
+pyan3.exe ping.py --uses --no-defines --colored --grouped --annotated --dot >ping.dot;    dot -Tpng ping.dot >ping.png
+pyan3.exe simnovator.py --uses --no-defines --colored --grouped --annotated --dot >simnovator.dot;    dot -Tpng simnovator.dot >simnovator.png
+pyan3.exe syslog.py --uses --no-defines --colored --grouped --annotated --dot >syslog.dot;    dot -Tpng syslog.dot >syslog.png
+pyan3.exe ttl_ssh.py --uses --no-defines --colored --grouped --annotated --dot >ttl_ssh.dot;    dot -Tpng ttl_ssh.dot >ttl_ssh.png
+pyan3.exe ueaction.py --uses --no-defines --colored --grouped --annotated --dot >ueaction.dot;    dot -Tpng ueaction.dot >ueaction.png
+
+
+
+#### 分析python 调用关系
+grep -E "^class|def " *.py
+luqingjuan@G08CNXDJFTTY049:/mnt/d/Git/L5G_CI/Python$ grep -E "python3" ../Jenkins/*
+grep -E "python3" *.py
+---
 ### excel 读写修改操作（xlwings）
 #### 安装
 * 安装xlwings
