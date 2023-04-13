@@ -166,5 +166,3 @@ CloudFormation为用户一种简单的方式来生成和管理相关AWS资源的
 #### 9 应用自动化部署：AWS Elastic Beanstalk
 
 Elastic Beanstalk能够帮助用户自动化部署应用程序，用户只需要上载应用程序或集成Git库，然后Elastic Beanstalk能够自动处理部署的具体细节问题，包括部署容量、负载均衡、自动扩展和应用健康监控等设置。Elastic Beanstalk支持的常见语言包括Nodes.js、PHP、Python、Ruby、Java和.NET等开发的应用。与通常的 平台即服务（PaaS）不同的是Elastic Beanstalk不但能够降低开发人员的应用部署难度，而且可以同时让开发人员保留对底层资源的控制能力。除了应用在部署中用到具体AWS资源的费用外，用户不需要额外给Elastic Beanstalk服务付费。
-
-[参考资料](https://www.cnblogs.com/tomato0906/articles/7732795.html)

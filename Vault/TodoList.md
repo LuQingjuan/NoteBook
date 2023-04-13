@@ -64,4 +64,10 @@
 
 ---
 ## 2023-04-06
+### 项目
+资料做成：
+	测试手顺资料做成
+		D:\SVN\01-ワークライブラリー\vRAN\07_検討資料\18_CI自動化\05_Radisys\Radisys_試験項目_8E_CIシナリオ.xlsx
+	项目说明材料做成：
+		D:\Git\L5G_CI\doc\L5GC_CI2_dev_6a2dbc32b26ea31fece3b33a93fa81e88cb9a845\pythonスクリプト構造資料_20230411.xlsx
 ### Note
