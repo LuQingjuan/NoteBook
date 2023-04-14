@@ -45,7 +45,7 @@ class ZhiHu():
         #
         #[使用python+selenium控制手工已打开的浏览器](https://www.cnblogs.com/HJkoma/p/9936434.html)
         #* Chrome浏览器路径加到patch中
-        #* 在命令行输入`chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\Users\luqingjuan\Downloads\selenum\AutomationProfile"`
+        #* 在命令行输入`chrome.exe --remote-debugging-port=9222 --user-data-dir="D:\NoteBook\Resource\Code\Scrapy\AutomationProfile"`
         #    * 对于-remote-debugging-port值，可以指定任何打开的端口。
         #    * 对于-user-data-dir标记，指定创建新Chrome配置文件的目录。它是为了确保在单独的配置文件中启动chrome，不会污染你的默认配置文件。
         #* 现在，我们需要接管上面的浏览器。新建一个python文件，运行以下代码：

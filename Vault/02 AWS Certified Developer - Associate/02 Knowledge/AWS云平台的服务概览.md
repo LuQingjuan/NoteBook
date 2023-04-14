@@ -17,63 +17,67 @@ AWS云平台的服务概览如下图所示：
 
 AWS在全球的基础设施上构建了AWS云平台的服务。用户可以根据需要使用其中一种或多种服务。为帮助初次接触AWS的童鞋建立一个AWS云服务的整体了解，接下来我就根据服务类别把这些主要的服务依次做个简单的介绍。在这篇文章中我们先介绍AWS云平台的基础服务中15种主要服务。
 
-#### 1 计算服务：Amazon EC2
+#### 1 计算服务：
+##### Amazon EC2
 
 Amazon EC2是AWS提供的云主机服务，它为用户提供了一个弹性的计算环境。简单的讲，一个EC2实例就是一台虚拟服务器。AWS目前提供将近30种不同的EC2计算实例类型供用户选择。用户可以根据实际应用的计算需求来选择不同EC2实例的种类和数量，并可以在数分钟内构建起自己的计算环境。
 
-#### 2 计算服务：Auto Scaling
+##### Auto Scaling
 
 Auto Scaling是一个帮助EC2计算服务进行自动伸缩的服务。通过与CloudWatch、ELB服务的配合使用，Auto Scaling能够让用户的EC2计算环境可以根据负载来自动进行横向扩展或收缩，这样不仅可以保障应用在不同的负载下有一致的用户体验，还可以在低负载下节约计算资源。
 
-#### 3 计算服务：AmazonWorkspaces
+##### AmazonWorkspaces
 
 Workspaces就是一个由AWS提供基于云的桌面虚拟化服务，或者称为桌面云服务。Workspaces是传统VDI方案的一种基于云计算的实现方式。用户可以用包括PC、iPad、Kindle和Android平板等各种终端设备通过网络访问他们的Workspaces桌面。
 
-#### 4 存储服务：Amazon S3
+#### 2 存储服务：
+##### Amazon S3
 
 S3（Simple Storage Service）为开发人员提供了一个高度扩展（Scalability）、高持久性（Durability）和高可用（Availability）的分布式海量数据存储服务。它是一个完全针对互联网的数据对象存储服务，应用程序可以通过一个简单的Web服务接口就可以通过互联网在任何时候访问S3上的数据，而且S3提供高达11个9（99.999999999%）的数据持久性。
 
-#### 5 存储服务：Amazon EBS
+##### Amazon EBS
 
 EBS（Elastic Block Store）是AWS为EC2实例提供的基于网络的块级存储服务。EBS卷可以独立于EC2实例的生命周期存在，在功能和使用上有点类似外置的硬盘存储或传统基于IP的SAN存储，因此当用户需要基于块级的持久性存储时，可以选择EBS卷，而且可以根据不同的应用场景选择不同的卷大小和IOPS（100-4000 IOPS/卷）。非持久性数据存储的需求用户可以直接使用实例存储（Instance Store）。
 
-#### 6 存储服务：AWS Storage Gateway
+##### AWS Storage Gateway
 
 Storage Gateway是一个把用户企业内存储和基于AWS云存储进行安全连接，并把用户在企业内部存储的数据备份到AWS的S3或Glacier的服务。Storage Gateway会以软件设备即基于虚拟机（VMWare ESXi或Microsoft Hyper-V服务器）的方式为用户提供一个软件安装在用户自己的环境中。这个软件设备一方面向用户的应用提供基于i-SCSI的存储（磁盘卷或虚拟带库）接口，另一方面把数据异步备份到S3或Glacier上面。
 
-#### 7 存储服务：Amazon Glacier
+##### Amazon Glacier
 
 Glacier是AWS提供的一种低成本的、针对数据归档或备份的存储服务。Glacier与S3服务一样提供了一个安全的和高达11个9的持久性数据存储，与S3随时访问数据不同的是Glacier的数据读取操作需要排队等待3-5个小时，不过这个数据读取时间和方便性与传统磁带备份相比还是有很大的提升。适合Glacier存储的应用场景特点是数据需要比较长时间保存但是偶尔需要读取。
 
-#### 8 数据库服务：Amazon RDS
+#### 3 数据库服务：
+##### Amazon RDS
 
 RDS（Relational Database Service）是用来帮助客户在AWS云平台上快速部署、扩展和运维关系型数据库的一个服务。RDS可以认为是一个DaaS（Database as a Service），它为你提供了一个由AWS高效管理的关系型数据库服务，这样你可以把你的精力放在应用程序和业务逻辑上而不用担心底层的数据库维护工作，包括补丁升级、数据备份等。RDS目前支持的数据库包括MySQL、Oracle、SQL Server和PostgreSQL。
 
-#### 9 数据库服务：Amazon DynamoDB
+##### Amazon DynamoDB
 
 DynamoDB是AWS提供的灵活可扩展的NoSQL数据库服务。DynamoDB采用键值（Key Value）方式的存储模式，并通过多份数据拷贝方式提供较高的可用性和持久性。作为一种NoSQL服务，用户不用担心数据量也不用管理数据库分区分表的问题。通过高速的网络和基于SSD的存储，DynamoDB能够保证高吞吐量和小于10毫秒的访问延时。
 
-#### 10 数据库服务：Amazon ElastiCache
+##### Amazon ElastiCache
 
 ElastiCache是AWS提供的一个基于内存的分布式缓存服务，一般可以通过这个服务来降低数据库的访问压力。目前ElastiCache支持两种开源的缓存引擎：Memcached和Redis。ElastiCache能够自动侦测和替换失效节点，从而降低用户构建和管理分布式缓存服务的负担。
 
-#### 11 数据库服务：Amazon Redshift
+##### Amazon Redshift
 
 Redshift是一个高效的、基于分布式群集的PB级数据仓库服务。这个数据仓库服务是由AWS管理并维护的，用户只需要通过管理控制台就可以快速创建和使用。Redshift可以与基于SQL的客户端工具和基于ODBC或JDBC的商务智能工具协同工作。用户根据实际使用量来付费，一般用户使用Redshift的成本约为其采用传统数据仓库产品服务的十分之一。
 
-#### 12 网络服务：Amazon VPC
+#### 4 网络服务：
+##### Amazon VPC
 
 VPC（Virtual Private Cloud）让用户可以在AWS云平台上构建出一个隔离的、自己能够管理配置和策略的虚拟网络环境，从而进一步提升用户在AWS环境中的资源的安全性。用户可以在VPC环境中管理自己的子网结构，IP地址范围和分配方式，网络的路由策略等。由于用户可以掌控并隔离VPC中的资源，因此对用户而言这就像是一个自己私有的云计算环境。
 
-#### 13 网络服务：Elastic Load Balancing
+##### Elastic Load Balancing
 
 Elastic Load Balancing（简称ELB）是AWS为EC2实例提供的可以跨可用区的负载均衡服务。它能够自动把HTTP/S或TCP请求分发给后面的EC2实例。ELB本身也是一项可扩展和高可用的服务，而且它能自动侦测后面EC2实例的健康状况，如果发现不健康的实例就会自动把访问流量导向其他实例。如果在VPC环境中，ELB还可以在不同应用层之间进行负载均衡的分发工作。
 
-#### 14 网络服务：Amazon Route53
+##### Amazon Route53
 
 Route53是AWS提供的一项高可用和高可扩展性的域名系统服务。它可以帮助终端用户的基于域名的互联网访问请求转化成基于IP地址的请求。Route53可以高效的把用户对AWS上服务的请求，如对EC2实例、ELB、CloudFront分发或S3存储桶的请求提供域名解析服务，当然作为一个域名服务它也可以为非AWS上服务请求提供解析服务。Route53还提供了基于延时和基于权重的访问路由功能。这里留个有意思的小问题，大家觉得为什么这个服务名中包含53而不是别的数字呢？吐舌头
 
-#### 15 网络服务：AWS Direct Connect
+##### AWS Direct Connect
 
 Direct Connect（简称DX）可以帮助用户在自己的数据中心或办公场所与AWS云平台之间建立起一个专用的网络通道。根据区域的不同，AWS提供了不同的DX连接点。用户可以通过这些DX连接点与AWS云平台建立起一个更为稳定可靠的高带宽网络连接。无论是VPC里的服务还是像S3这样通过公开的互联网服务，用户都可以通过DX连接来得到相对一致的网络服务体验。
 
