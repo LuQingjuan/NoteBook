@@ -1,20 +1,3 @@
-[Python爬虫篇：爬虫笔记合集](https://blog.csdn.net/AI19970205/article/details/124282549)
-[python爬虫(廖雪峰商业爬虫)](https://blog.csdn.net/baidu_41867252/article/details/86821355)
-[Python爬虫利器之Beautiful Soup入门详解，实战总结！！！](https://blog.csdn.net/llllllkkkkkooooo/article/details/108511964)
-[Python爬虫-爬取知乎（小结）](https://blog.csdn.net/weixin_49345590/article/details/109848459)
-[Python 爬虫（一）：Header cookies 的设置](https://zhuanlan.zhihu.com/p/518788491?utm_id=0)
-1. 在Chrome浏览器的网页上：右键 ——> 检查 ——> Network ——> Doc ——> 在 Name 里找到对应的请求文件
-2. 右键该文件，copy ——> **copy as cURL (bash)**，注意不是【copy as cURL (cmd)】
-3. 打开[解析网站](https://curl.trillworks.com/) ，粘贴 cURL (bash) 到左边 curl command，右边会自动出 Python 代码
-
-[23个Python爬虫开源项目代码：微信、淘宝、豆瓣、知乎、微博...](https://blog.csdn.net/CVGao/article/details/109475601?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-5-109475601-blog-128267024.pc_relevant_aa2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-5-109475601-blog-128267024.pc_relevant_aa2&utm_relevant_index=9)
-
----
-[Python爬虫之Js逆向案例(1)-知乎搜索](https://www.ngui.cc/el/522173.html?action=onClick)
-
-[可能可行jsrpc Python爬虫之Js逆向案例(13)-某乎最新x-zse-96的rpc方案后续](https://blog.csdn.net/li11_/article/details/127658491)
-
-
 
 # 安装selenium
 pip3 install seleniumpip
@@ -33,6 +16,8 @@ driver.get("https://www.baidu.com/")
 
 [使用python+selenium控制手工已打开的浏览器](https://www.cnblogs.com/HJkoma/p/9936434.html)
 * Chrome浏览器路径加到patch中
+[chromedriver下载列表](https://chromedriver.storage.googleapis.com/index.html)
+`C:\Users\luqingjuan\AppData\Local\Programs\Python\Python37\chromedriver.exe`
 * 在命令行输入`chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\Users\luqingjuan\Downloads\selenum\AutomationProfile"`
     * 对于-remote-debugging-port值，可以指定任何打开的端口。
     * 对于-user-data-dir标记，指定创建新Chrome配置文件的目录。它是为了确保在单独的配置文件中启动chrome，不会污染你的默认配置文件。
@@ -52,9 +37,26 @@ print(driver.title)
 
 
 
+---
+
+[Python爬虫篇：爬虫笔记合集](https://blog.csdn.net/AI19970205/article/details/124282549)
+[python爬虫(廖雪峰商业爬虫)](https://blog.csdn.net/baidu_41867252/article/details/86821355)
+[Python爬虫利器之Beautiful Soup入门详解，实战总结！！！](https://blog.csdn.net/llllllkkkkkooooo/article/details/108511964)
+[Python爬虫-爬取知乎（小结）](https://blog.csdn.net/weixin_49345590/article/details/109848459)
+[Python 爬虫（一）：Header cookies 的设置](https://zhuanlan.zhihu.com/p/518788491?utm_id=0)
+1. 在Chrome浏览器的网页上：右键 ——> 检查 ——> Network ——> Doc ——> 在 Name 里找到对应的请求文件
+2. 右键该文件，copy ——> **copy as cURL (bash)**，注意不是【copy as cURL (cmd)】
+3. 打开[解析网站](https://curl.trillworks.com/) ，粘贴 cURL (bash) 到左边 curl command，右边会自动出 Python 代码
+
+[23个Python爬虫开源项目代码：微信、淘宝、豆瓣、知乎、微博...](https://blog.csdn.net/CVGao/article/details/109475601?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-5-109475601-blog-128267024.pc_relevant_aa2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-5-109475601-blog-128267024.pc_relevant_aa2&utm_relevant_index=9)
+
+---
+[Python爬虫之Js逆向案例(1)-知乎搜索](https://www.ngui.cc/el/522173.html?action=onClick)
+
+[可能可行jsrpc Python爬虫之Js逆向案例(13)-某乎最新x-zse-96的rpc方案后续](https://blog.csdn.net/li11_/article/details/127658491)
 
 
-
+---
 
 [python3+selenium4自动化测试环境搭建-基础篇1](https://blog.csdn.net/qq_18298049/article/details/117001377)
 [python3+selenium4自动化测试操作启动不同的浏览器-基础篇2](https://blog.csdn.net/qq_18298049/article/details/117047377)

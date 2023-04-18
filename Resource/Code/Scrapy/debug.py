@@ -2,6 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from multiprocessing import Process
 #ID = "id"
 #XPATH = "xpath"
 #LINK_TEXT = "link text"
@@ -39,7 +40,7 @@ class Test_Tools():
         flag=True
         browser=self.driver
         ele=browser.find_elements_by_css_selector(element)
-        if	len(ele)==0:
+        if len(ele)==0:
             flag=False
             return flag
         if len(ele)==1:
@@ -87,30 +88,11 @@ class Item_Pipeline():
 class Scrapy_Engine():
 #Scrapy 引擎是整个框架的核心，用来处理整个系统的数据流，触发各种事件。它用来控制调试器、下载器、爬虫。实际上，引擎相当于计算机的CPU，它控制着整个流程。
     def __init__(self):
-        # [使用python+selenium控制手工已打开的浏览器](https://www.cnblogs.com/HJkoma/p/9936434.html)
-        # * Chrome浏览器路径加到patch中
-        # * 在命令行输入`chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\Users\luqingjuan\Downloads\selenum\AutomationProfile"`
-        #     * 对于-remote-debugging-port值，可以指定任何打开的端口。
-        #     * 对于-user-data-dir标记，指定创建新Chrome配置文件的目录。它是为了确保在单独的配置文件中启动chrome，不会污染你的默认配置文件。
-        # * 现在，我们需要接管上面的浏览器。新建一个python文件，运行以下代码：
-        # ```
-        # from selenium import webdriver
-        # from selenium.webdriver.chrome.options import Options
-        #  
-        # chrome_options = Options()
-        # chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-        # chrome_driver = "C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe"
-        # driver = webdriver.Chrome(chrome_driver, chrome_options=chrome_options)
-        # print(driver.title)
-        # ```
-
-
-        # chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\Users\luqingjuan\Downloads\selenum\AutomationProfile"
-        # chrome.exe --remote-debugging-port=9222 --user-data-dir="D:\NoteBook\Code\Scrapy\AutomationProfile"
+        # chrome.exe --remote-debugging-port=9222 --user-data-dir="D:\NoteBook\Resource\Code\Scrapy\AutomationProfile"
         #os.system("chrome.exe --remote-debugging-port=9222 --user-data-dir=\"" + str(pathlib.Path().absolute()) + "\\AutomationProfile\"")
         chrome_options = Options()
         chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-        self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.maximize_window()
 
         scheduler = Scheduler()
@@ -366,17 +348,34 @@ class ZhiHu(Scrapy_Engine):
             comment.click()
         #self.show_data()
 
+class Chrome_Process(Process):
+    def __init__(self, name, cmd):
+        super().__init__()
+        self.name=name
+        self.cmd=cmd
 
-if len(sys.argv) == 1:
-    print("Need search info")
-    exit(1)
-elif len(sys.argv) == 2:
-    search_info = sys.argv[1]
-    download_times = 30
-elif len(sys.argv) == 3:
-    search_info = sys.argv[1]
-    download_times = int(sys.argv[2])
+    def run(self):
+        print(self.name)
+        os.system(self.cmd)
 
-zhihu = ZhiHu(search_info, download_times)
+if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        print("Need search info")
+        exit(1)
+    elif len(sys.argv) == 2:
+        search_info = sys.argv[1]
+        download_times = 30
+    elif len(sys.argv) == 3:
+        search_info = sys.argv[1]
+        download_times = int(sys.argv[2])
+
+
+    chrome=Chrome_Process("Chrome process 进程", "python.exe .\Start_Chrome.py")
+    chrome.start() #start会自动调用run
+    time.sleep(2)
+
+    print('主线程')
+    zhihu = ZhiHu(search_info, download_times)
+    chrome.stop()
 
 

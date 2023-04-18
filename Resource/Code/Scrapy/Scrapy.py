@@ -68,7 +68,7 @@ class ZhiHu():
         #os.system("chrome.exe --remote-debugging-port=9222 --user-data-dir=\"" + str(pathlib.Path().absolute()) + "\\AutomationProfile\"")
         chrome_options = Options()
         chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-        self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        self.driver = webdriver.Chrome(options=chrome_options)
 
         self.driver.maximize_window()
         self.driver.get("https://www.zhihu.com")
