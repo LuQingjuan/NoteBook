@@ -20,6 +20,8 @@ import os
 from bs4 import BeautifulSoup           # 网页解析
 
 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Common
 
 class Test_Tools():
     def Test_X_Y():
@@ -58,6 +60,11 @@ def get_random(date):
 def random_sleep(_time):
     time.sleep(get_random(_time))
 
+
+
+
+
+
 class Scheduler():
 #调度器，说白了把它假设成为一个URL（抓取网页的网址或者说是链接）的优先队列，由它来决定下一个要抓取的网址是什么，同时去除重复的网址（不做无用功）。用户可以自己的需求定制调度器。
     def __init__(self):
@@ -85,51 +92,47 @@ class Item_Pipeline():
     def save(self):
         pass
 
-class Scrapy_Engine():
-#Scrapy 引擎是整个框架的核心，用来处理整个系统的数据流，触发各种事件。它用来控制调试器、下载器、爬虫。实际上，引擎相当于计算机的CPU，它控制着整个流程。
+
+class Chrome_Process(Process):
     def __init__(self):
-        # chrome.exe --remote-debugging-port=9222 --user-data-dir="D:\NoteBook\Resource\Code\Scrapy\AutomationProfile"
+        super().__init__()
+        self.kill_chrome()
+
+    def start_search(self):
+        print("Open Chrome ...")
+        #print("当前进程%d Start" % (os.getpid()))
+        os.system("chrome.exe --remote-debugging-port=9222 --user-data-dir=\"D:\\NoteBook\Resource\\Code\\Scrapy\\AutomationProfile\"")
         #os.system("chrome.exe --remote-debugging-port=9222 --user-data-dir=\"" + str(pathlib.Path().absolute()) + "\\AutomationProfile\"")
+
+    def __del__(self):
+        print("Close Chrome ...")
+        #print("当前进程%d Stop" % (os.getpid()))
+        self.kill_chrome()
+
+    def kill_chrome(self):
+        pid_list=[]
+        result = os.popen('tasklist | findstr chromedriver.exe')
+        for line in result.readlines():
+            pid_list.append(line.split()[1])
+        result.close()
+
+        result = os.popen('tasklist | findstr chrome.exe ')
+        for line in result.readlines():
+            pid_list.append(line.split()[1])
+        result.close()
+
+        while len(pid_list)>0:
+            os.system("powershell.exe kill " + pid_list.pop())
+
+class Web_Common():
+    def __init__(self):
+        time.sleep(1)
         chrome_options = Options()
         chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.maximize_window()
 
-        scheduler = Scheduler()
-        downloader = Downloader()
-        spider = Spider()
-        item_pipeline = Item_Pipeline()
-
-class Save_Data():
-    def __init__(self, filename):
-        self.filename = filename+'.md'
-        f = open(self.filename, 'w+')
-        f.close()
-
-    def append_title(self, title):
-        self.append('# ', title)
-
-    def append_topic(self, topic, href):
-        self.append('- [ ] ', '['+topic+']('+href+')')
-
-    def append_info(self, comm):
-        self.append('    ', comm)
-
-    def append(self, flag , data):
-        with open(self.filename, 'ab+') as f:
-            # os.linesep代表当前操作系统上的换行符
-            f.write((flag + data + os.linesep).encode('utf-8'))
-
-class ZhiHu(Scrapy_Engine):
-    def __init__(self, info, download_times):
-        super(ZhiHu, self).__init__()
-        self.driver.get("https://www.zhihu.com")
-        random_sleep(1)
-
-        self.saver = Save_Data("知乎_"+info)
-        self.search_info(info, download_times)
-
-    def load_all(self, load_times):
+    def load_all_no_more_buttom(self, load_times):
         print("Start loading ...")
         screenWidth, screenHeight = pyautogui.size()
         #print(str(screenWidth) + " : " + str(screenHeight))
@@ -148,28 +151,101 @@ class ZhiHu(Scrapy_Engine):
             random_sleep(5)
         self.driver.execute_script("scrollBy(0,250);")
 
-    def load_all_old(self):
-        if 1:
-            print("Please load all page.")
-            input('Press enter to continue: ')
-        else:#debug
-            screenWidth, screenHeight = pyautogui.size()
-            #x1 = screenWidth - 1
-            #y1 = screenHeight - 60
-            #print(str(x1)+":"+str(y1))
-            #x1=1919
-            #y1=1020
-            #print(str(x1)+":"+str(y1))
-            pyautogui.click(screenWidth-get_random(2), screenHeight-get_random(60), button='left')
-            pyautogui.mouseDown()
-            random_sleep(30)
-            #random_sleep(1)
-            pyautogui.mouseUp()
-            random_sleep(1)
+    def load_all(self, todo):
+        pass
+    
+    def Search_Key(self, key, input_item, button_item):
+        print("Start Search " + key + " ...")
+        input_item.send_keys(key)
+        button_item.click() # click search
+        random_sleep(2)
 
-        if len(self.driver.find_elements(By.XPATH, '/html/body/div[1]/div/div[5]/div/button')) > 0:
-            self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div[5]/div/div/button').click() # click Top
-            random_sleep(5)
+    def __del__(self):
+        pass
+
+
+class Save_Data():
+    def info_list(self, web, key, data_list):
+        self.filename = web + "_" + key + '.md'
+        f = open(self.filename, 'w+')
+        f.close()
+
+        self.append_title(key)
+        for datas in data_list:
+            if "topic" in datas.keys():
+                if "href" in datas.keys():
+                    self.append_topic(datas["topic"], datas["href"])
+                else:
+                    self.append_info(datas[""])
+            if "info" in datas.keys():
+                for data in datas["info"]:
+                    self.append_info(data)
+
+    def append_title(self, title):
+        self.append('# ', title)
+
+    def append_topic(self, topic, href):
+        self.append('- [ ] ', '['+topic+']('+href+')')
+
+    def append_info(self, comm):
+        self.append('    ', comm)
+
+    def append(self, flag , data):
+        with open(self.filename, 'ab+') as f:
+            # os.linesep代表当前操作系统上的换行符
+            f.write((flag + data + os.linesep).encode('utf-8'))
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ZhuHu
+
+class ZhiHu(Web_Common):
+    def __init__(self):
+        super().__init__()
+        print("Open ZhiHu ...")
+        self.driver.get("https://www.zhihu.com")
+        random_sleep(1)
+
+    def collect_search_data(self, html_file_name):
+        pageSource = self.driver.page_source
+        soup = BeautifulSoup(pageSource, 'html.parser')
+
+        with open(html_file_name, 'w', encoding='utf-8') as infile:
+            infile.write(str(soup.find('div', role="list").prettify()))
+            #infile.write(str(soup.find('div', class_="SearchMain").prettify()))
+
+    def search_info(self, file_name, load_times):
+        input_item = self.driver.find_element(By.CLASS_NAME, "SearchBar-input").find_element(By.TAG_NAME, 'input')
+        button_item = self.driver.find_element(By.CLASS_NAME, "SearchBar-input").find_element(By.TAG_NAME, 'button')
+        self.Search_Key(key, input_item, button_item)
+
+        self.load_all_no_more_buttom(load_times)
+
+        html_file_name = '知乎_' + file_name + '.html'
+        self.collect_search_data(html_file_name)
+
+        #for data in self.driver.find_elements(By.XPATH, '/html/body/div[1]/div/main/div/div[2]/div[2]/div/div/div/div/div'):
+        for data in self.driver.find_elements(By.CLASS_NAME, "SearchResult-Card"):
+            data = data.find_element(By.XPATH,'div/div')
+            content_type = data.get_attribute('class')
+            #print(content_type)
+            if 'AnswerItem' in content_type or 'ArticleItem'  in content_type or 'ZvideoItem' in content_type:
+                comment_item = data.find_elements(By.TAG_NAME, "button")[3]
+                result = re.search('(?P<comment_num>\d+) 条评论', comment_item.text)
+                if result is None:
+                    comment_num = 0
+                else:
+                    comment_num = int(result.group('comment_num'))
+                if comment_num > 0:
+                    comment_item.click()
+                    random_sleep(int(comment_num/10+2))
+            else:
+                continue
+            random_sleep(2)
+        return html_file_name
+
+
+
+
 
     def show_data(self):
         pageSource = self.driver.page_source
@@ -205,9 +281,6 @@ class ZhiHu(Scrapy_Engine):
                 continue
             id += 1
 
-
-
-
     def KfeCollection_PcCollegeCard_wrapper(self, id, data):
         #杂志文章
         title_item =   data.find_element(By.CLASS_NAME, "KfeCollection-PcCollegeCard-title").find_elements(By.TAG_NAME, "span")[0]
@@ -215,10 +288,13 @@ class ZhiHu(Scrapy_Engine):
         #support_item = 
         #comment_item = 
         #date_item =    
-        self.saver.append_topic(title_item.text, data.find_element(By.CLASS_NAME, "KfeCollection-PcCollegeCard-title").find_element(By.TAG_NAME, "a").get_attribute('href'))
-        self.saver.append_info(content_item.text)
+        #self.saver.append_topic(title_item.text, data.find_element(By.CLASS_NAME, "KfeCollection-PcCollegeCard-title").find_element(By.TAG_NAME, "a").get_attribute('href'))
+        #self.saver.append_info(content_item.text)
         print(str(id) + "《" + title_item.text + "》")
         print(content_item.text)
+        return {"topic": title_item.text,
+                "href"  : data.find_element(By.CLASS_NAME, "KfeCollection-PcCollegeCard-title").find_element(By.TAG_NAME, "a").get_attribute('href'),
+                "info" : [content_item.text]}
 
     def AnswerItem_ArticleItem_ZvideoItem_Comment(self, data):
         for list_data in data.find_elements(By.XPATH, "div"):
@@ -262,12 +338,13 @@ class ZhiHu(Scrapy_Engine):
         #print(BeautifulSoup(support_item.get_property("outerHTML"), 'html.parser').prettify())
         #print(BeautifulSoup(comment_item.get_property("outerHTML"), 'html.parser').prettify())
         date_item =    data.find_element(By.CLASS_NAME, "SearchItem-time")
-        self.saver.append_topic(title_item.text, data.find_element(By.CLASS_NAME, "ContentItem-title").find_element(By.TAG_NAME, "a").get_attribute('href'))
-        self.saver.append_info("["  + date_item.text + ' · ' + support_item.text + "]")
-        self.saver.append_info(content_item.text)
+        #self.saver.append_topic(title_item.text, data.find_element(By.CLASS_NAME, "ContentItem-title").find_element(By.TAG_NAME, "a").get_attribute('href'))
+        #self.saver.append_info("["  + date_item.text + ' · ' + support_item.text + "]")
+        #self.saver.append_info(content_item.text)
         print(str(id) + "《" + title_item.text + "》    ["  + date_item.text + ' · ' + support_item.text + "]")
         print("    " + content_item.text)
         print("    " + comment_item.text)
+
         result = re.search('(?P<comment_num>\d+) 条评论', comment_item.text)
         if result is None:
             comment_num = 0
@@ -279,15 +356,23 @@ class ZhiHu(Scrapy_Engine):
     #        random_sleep(int(comment_num/10+2))
     #        self.AnswerItem_ArticleItem_ZvideoItem_Comment(data.find_element(By.CLASS_NAME, "Comments-container").find_element(By.XPATH,'div/div[2]/div[2]/div'))
 
+        return {"topic": title_item.text,
+                "href"  : data.find_element(By.CLASS_NAME, "ContentItem-title").find_element(By.TAG_NAME, "a").get_attribute('href'),
+                "info" : [ "["  + date_item.text + ' · ' + support_item.text + "]",
+                            content_item.text]}
+
     def ContentItem_actions(self, id, data):
         #关注问题
         title_item =   data.find_element(By.CLASS_NAME, "ContentItem-title")
         comment_item = data.find_element(By.CLASS_NAME, "ContentItem-actions").find_element(By.TAG_NAME, "a")
         date_item =    data.find_element(By.CLASS_NAME, "SearchItem-time")
-        self.saver.append_topic(title_item.text, data.find_element(By.CLASS_NAME, "ContentItem-title").find_element(By.TAG_NAME, "a").get_attribute('href'))
-        self.saver.append_info("["  + date_item.text + "]")
+        #self.saver.append_topic(title_item.text, data.find_element(By.CLASS_NAME, "ContentItem-title").find_element(By.TAG_NAME, "a").get_attribute('href'))
+        #self.saver.append_info("["  + date_item.text + "]")
         print(str(id) + "《" + title_item.text + "》    ["  + date_item.text + "]")
         print("    " + comment_item.text)
+        return {"topic": title_item.text,
+                "href"  : data.find_element(By.CLASS_NAME, "ContentItem-title").find_element(By.TAG_NAME, "a").get_attribute('href'),
+                "info" : [ "["  + date_item.text + "]"]}
 
     def Not_ContentItem_actions(self, id, data):
         title_item =   data.find_element(By.CLASS_NAME, "ContentItem-title").find_element(By.TAG_NAME, "a")
@@ -296,86 +381,124 @@ class ZhiHu(Scrapy_Engine):
         comment_item = data.find_element(By.CLASS_NAME, "SearchItem-meta")
         #comment_item = data.find_element(By.CLASS_NAME, "ContentItem-actions").find_element(By.TAG_NAME, "a")
         #date_item =    data.find_element(By.CLASS_NAME, "SearchItem-time")
-        self.saver.append_topic(title_item.text, title_item.get_attribute('href'))
+        #self.saver.append_topic(title_item.text, title_item.get_attribute('href'))
         print(str(id) + " " + title_item.text + " ")
         print("    " + comment_item.text)
+        return {"topic": title_item.text,
+                "href"  : title_item.get_attribute('href')}
 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# CSDN
 
+class CSDN(Web_Common):
+    def __init__(self):
+        super().__init__()
+        print("Open CSDN ...")
+        self.driver.get("https://www.csdn.net/")
+        random_sleep(1)
 
-    def search_info(self, info, load_times):
-        self.driver.find_element(By.CLASS_NAME, "SearchBar-input").find_element(By.TAG_NAME, 'input').send_keys(info)
-        self.driver.find_element(By.CLASS_NAME, "SearchBar-input").find_element(By.TAG_NAME, 'button').click() # click search
-        random_sleep(2)
+    def collect_search_data(self, html_file_name):
+        pageSource = self.driver.page_source
+        soup = BeautifulSoup(pageSource, 'html.parser')
 
-        self.load_all(load_times)
+        with open(html_file_name, 'w', encoding='utf-8') as infile:
+            infile.write(str(soup.find('div', class_="list-container").prettify()))
+            #infile.write(str(soup.find('div', class_="SearchMain").prettify()))
 
-        self.saver.append_title(info)
-        id = 1
-        comment_list = []
+    def search_info(self, file_name, load_times):
+        input_item = self.driver.find_element(By.CLASS_NAME, "toolbar-search-container").find_element(By.TAG_NAME, 'input')
+        button_item = self.driver.find_element(By.CLASS_NAME, "toolbar-search-container").find_element(By.TAG_NAME, 'button')
+        self.Search_Key(key, input_item, button_item)
+
+        self.load_all_no_more_buttom(load_times)
+
+        html_file_name = 'CSDN_' + file_name + '.html'
+        self.collect_search_data(html_file_name)
+
         #for data in self.driver.find_elements(By.XPATH, '/html/body/div[1]/div/main/div/div[2]/div[2]/div/div/div/div/div'):
         for data in self.driver.find_elements(By.CLASS_NAME, "SearchResult-Card"):
-            print("------------------------------------------------------------------------------------------------")
-            #print("------------------------------------------------------------------------------------------------\n" + str(id)+" : \n"+data.text)
             data = data.find_element(By.XPATH,'div/div')
             content_type = data.get_attribute('class')
             #print(content_type)
-            if 'KfeCollection-PcCollegeCard-wrapper' in content_type:
-                self.KfeCollection_PcCollegeCard_wrapper(id, data)
-            elif 'AnswerItem' in content_type or 'ArticleItem'  in content_type or 'ZvideoItem' in content_type:
-                self.AnswerItem_ArticleItem_ZvideoItem(id, data)
-            elif 'ContentItem' in content_type:
-                if len(data.find_elements(By.CLASS_NAME, "ContentItem-actions")) > 0:
-                    self.ContentItem_actions(id, data)
+            if 'AnswerItem' in content_type or 'ArticleItem'  in content_type or 'ZvideoItem' in content_type:
+                comment_item = data.find_elements(By.TAG_NAME, "button")[3]
+                result = re.search('(?P<comment_num>\d+) 条评论', comment_item.text)
+                if result is None:
+                    comment_num = 0
                 else:
-                    print("********************")
-                    self.Not_ContentItem_actions(id, data)
+                    comment_num = int(result.group('comment_num'))
+                if comment_num > 0:
+                    comment_item.click()
+                    random_sleep(int(comment_num/10+2))
             else:
                 continue
-            id += 1
             random_sleep(2)
+        return html_file_name
 
 
-            #if id >5:
-            #    break
-            #soup = BeautifulSoup(data.get_property("outerHTML"), 'html.parser')
-            #print("------------------------------------------------------------------------------------------------\n" + str(id)+" : \n"+soup.prettify())
-            #print("*********************************************\n" + str(id)+" : \n"+data.find_element(By.CLASS_NAME, 'ContentItem-title').text+"\n"+data.find_element(By.CLASS_NAME, 'RichContent-inner').text)
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# API
 
-            #break
-        for comment in comment_list:
-            soup = BeautifulSoup(comment.get_property("outerHTML"), 'html.parser')
-            print("------------------------------------------------------------------------------------------------\n" + str(id)+" : \n"+soup.prettify())
-            comment.click()
-        #self.show_data()
+class Scrapy_Engine():
+#Scrapy 引擎是整个框架的核心，用来处理整个系统的数据流，触发各种事件。它用来控制调试器、下载器、爬虫。实际上，引擎相当于计算机的CPU，它控制着整个流程。
+    def __init__(self):
+        # chrome.exe --remote-debugging-port=9222 --user-data-dir="D:\NoteBook\Resource\Code\Scrapy\AutomationProfile"
+        #os.system("chrome.exe --remote-debugging-port=9222 --user-data-dir=\"" + str(pathlib.Path().absolute()) + "\\AutomationProfile\"")
+        self.chrome = Chrome_Process("Chrome process 进程", "python.exe .\Start_Chrome.py")
+        self.chrome.start() #start会自动调用run
+    
+    def run(self, key):
+        zhihu = ZhiHu()
+        html_file_name = zhihu.search_info(key, 2)
+        del(zhihu)
 
-class Chrome_Process(Process):
-    def __init__(self, name, cmd):
-        super().__init__()
-        self.name=name
-        self.cmd=cmd
+        print(html_file_name)
+        #saver = Save_Data()
+        #saver.info_list("知乎", key + "_new", article_list)
 
-    def run(self):
-        print(self.name)
-        os.system(self.cmd)
+    def __del__(self):
+        self.chrome.terminate()
+
+def Usage():
+	print('------------------------------------------------------------')
+	print('Usage: python debug.py --mode=Search --web=[ZhiHu,CSND] --key=[Key]')
+	print('Usage: python debug.py --mode=Download --href=[URL]')
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print("Need search info")
-        exit(1)
-    elif len(sys.argv) == 2:
-        search_info = sys.argv[1]
-        download_times = 30
-    elif len(sys.argv) == 3:
-        search_info = sys.argv[1]
-        download_times = int(sys.argv[2])
+    mode = ''
+    key=''
+    href=''
+    argvs = sys.argv
+
+    while len(argvs) > 1:
+        myArgv = argvs.pop(1)    # 0th is this file's name
+        if re.match('^\-\-help$', myArgv, re.IGNORECASE):
+            Usage()
+            sys.exit(0)
+        elif re.match('^\-\-mode=(.+)$', myArgv, re.IGNORECASE):
+            matchReg = re.match('^\-\-mode=(.+)$', myArgv, re.IGNORECASE)
+            mode = matchReg.group(1)
+        elif re.match('^\-\-key=(.+)$', myArgv, re.IGNORECASE):
+            matchReg = re.match('^\-\-key=(.+)$', myArgv, re.IGNORECASE)
+            key = matchReg.group(1)
+        elif re.match('^\-\-href=(.+)$', myArgv, re.IGNORECASE):
+            matchReg = re.match('^\-\-href=(.+)$', myArgv, re.IGNORECASE)
+            href = matchReg.group(1)
+        else:
+            Usage()
+            sys.exit('Invalid Parameter: ' + myArgv)
+
+    if "Search" == mode:
+        engine = Scrapy_Engine()
+        engine.start_search(key)
+        del(engine)
+    elif "Download" == mode:
+        pass
+    else:
+        Usage()
+        sys.exit(0)
 
 
-    chrome=Chrome_Process("Chrome process 进程", "python.exe .\Start_Chrome.py")
-    chrome.start() #start会自动调用run
-    time.sleep(2)
 
-    print('主线程')
-    zhihu = ZhiHu(search_info, download_times)
-    chrome.stop()
 
 
