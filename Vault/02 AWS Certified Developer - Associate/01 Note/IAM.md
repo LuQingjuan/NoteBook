@@ -1,41 +1,24 @@
 * Type:
 * Tags:
-* Date: 2023-03-29 09:52:20
+* Date: ${date_time}
 * Related:
 * Reference:[]()
 
 ## IAM
-IAM  = Identity and Access Management, Global service
+IAM  = Identity and Access Management
+身份和访问的管理
 
-Root account：自动创建，不使用，不分享。
-Users：可以加入多个Group，可以不加入Group。
-Groups：仅包含User，不包含Group。
+### 功能
+* 创建账号，分配组
+* 默认创建了root账号
+  * **root账号，仅仅用于创建账号，不做其他使用。**
+* 一个账号对应一个组织内部的用户，也可以进行分组
+* **组仅包含用户**
+* 用户可以不属于任何组，也可以属于多个组
+![](image/IAM_account_group.PNG)
 
-权限
-Users & Groups通过Json文件设置权限
-只给用户需要的最小权限
-
-* Consists of 
-  * Version: policy language version, always include “2012-10-17”
-  * Id: an identifier for the policy (optional) 
-  * Statement: one or more individual statements (required)
-* Statements consists of 
-  * Sid: an identifier for the statement (optional) 
-  * Effect: whether the statement allows or denies access (Allow, Deny)
-  * Principal: account/user/role to which this policy applied to 
-  * Action: list of actions this policy allows or denies 
-  * Resource: list of resources to which the actions applied to 
-  * Condition: conditions for when this policy is in effect (optional)
-
-To access AWS, you have three options:
-* AWS Management Console (protected by password + [[MFA#MFA|MFA]])
-* AWS Command Line Interface ([[CLI#CLI|CLI]]): protected by access keys
-* AWS Software Developer Kit ([[SDK#SDK|SDK]]) - for code: protected by access key
-
-IAM Roles for Services 
-* Some AWS service will need to perform actions on your behalf
-* To do so, we will assign permissions to AWS services with IAM Roles
-* Common roles:
-  * EC2 ([[Amazon EC2#Amazon EC2|Amazon EC2]]) Instance Roles
-  * Lambda ([[AWS Lambda#AWS Lambda|AWS Lambda]]) Function Roles
-  * Roles for CloudFormation ([[AWS CloudFormation#AWS CloudFormation|AWS CloudFormation]])
+### 权限
+* 通过Json文件给用户和组分配权限，这个叫polices（策略）
+* policies定于用户的权限
+* 不允许每个人都可以做任何灾难性的事情（新用户可能会花费更多的钱，安全隐患）
+* 最小特权原则：不给用户超过需要的权限
