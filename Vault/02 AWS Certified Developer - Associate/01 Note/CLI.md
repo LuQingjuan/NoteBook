@@ -5,11 +5,31 @@
 * Reference:[]()
 
 ## CLI
-AWS Command Line Interface
+Command Line Interface
+命令交互
 
-A tool that enables you to interact with AWS services using commands in 
-your command-line shell
-• Direct access to the public APIs of AWS services
-• You can develop scripts to manage your resources
-• It’s open-source https://github.com/aws/aws-cli
-• Alternative to using AWS Management Consol
+[GitHub](https://github.com/aws/aws-cli)
+
+### 安装
+* [安装手顺](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+* 查看版本：
+  * cmd
+  * aws --version
+* 创建访问密钥
+* 配置config
+    `aws configure`
+    输入
+    访问密钥的用户名
+    密码
+    区域，选择近的：ap-northeast-2                 Seoul
+
+### CloudShell（云Linux系统）
+    网页访问
+  * aws --version
+    区域 ap-south-1                     Mumbai
+
+### 开始使用
+`aws iam list-isers`
+
+
+[命令一览](https://awscli.amazonaws.com/v2/documentation/api/latest/index.html)
