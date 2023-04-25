@@ -17,3 +17,4 @@ $ vi .git/config
     <USERNAME>：是你自己github的用户名
     <REPO>：是你的仓库名称
 ```
+test
