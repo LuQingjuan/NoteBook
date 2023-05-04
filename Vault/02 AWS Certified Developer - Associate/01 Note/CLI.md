@@ -25,11 +25,11 @@ Command Line Interface
 
 ### CloudShell（云Linux系统）
     网页访问
-  * aws --version
+  * `aws --version`
     区域 ap-south-1                     Mumbai
 
 ### 开始使用
-`aws iam list-isers`
+列出用户：`aws iam list-users`
 
 
 [命令一览](https://awscli.amazonaws.com/v2/documentation/api/latest/index.html)
