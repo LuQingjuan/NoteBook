@@ -17,4 +17,20 @@ $ vi .git/config
     <USERNAME>：是你自己github的用户名
     <REPO>：是你的仓库名称
 ```
-test
+
+## 代理
+* 代理配置
+    ```
+    $ export http://centos5g:1249124912@10.128.145.88:8080/
+    $ export http://centos5g:1249124912@10.128.145.88:8080/
+    ```
+* 查看代理
+    ```
+    $ echo $http_proxy
+    $ echo $https_proxy
+    ```
+* 取消设置
+    ```
+    $ unset http_proxy
+    $ unset https_proxy
+    ```

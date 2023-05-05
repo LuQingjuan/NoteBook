@@ -115,3 +115,116 @@ m：实例类
 * OutBound rules（出站规则）：
 * 可以将任意多个安全组附加到一个安全组
 * 可以将任意多个EC2 实例附加到一个安全组
+
+### 采购选项
+
+| Type                  |                  | 工作负载           | discount |                                                                          | Use Case           |                                                                                                                               |     |
+| --------------------- | ---------------- | ------------------ | -------- | ------------------------------------------------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- | --- |
+| On Deemand            | 按需实例         | 短期               | 100%     | 可预测的定价<br>按秒支付                                                 |                    | coming and staying in resort whenever we like, we pay the full price                                                          |
+| Reserved              | 保留实例         | 长期 (1 & 3 years) | 72%      |                                                                          | 要长时间运行数据库 | like planning ahead and if we plan to stay for a long time, we may get a good discount.                                       |
+| Convertible Reserved  | 可转换的保留实例 | 长期 (1 & 3 years) | 66%      | 随时间推移改变                                                           |                    |
+| Savings Plans         | 储蓄计划         | 长期(1 & 3 years)  | 72%      | 它们更加现代化，为不是承诺特定的实例类型，而是承诺以美元为单位的特定使用量 |                    | pay a certain amount per hour for certain period and stay in any room type (e.g.，King, Suite, Sea View，...)                 |
+| Spot Instances        | 现货实例         | 非常短             | 90%      | 非常非常便宜<br>可靠性差:随时都可能丢失这些实例                          |                    | the hotel allows people to bid for the empty rooms and the highest bidder keeps the rooms. You can get kicked out at any time |
+| Dedicated Hosts       | 专用主机         |                    | 最昂贵   | 最贵<br>整个物理服务器<br>控制实例位置                                   |                    | We book an entire building of the resort                                                                                      |
+| Dedicated Instances   | 专用实例         |                    |          | 没有其他客户会共享您的硬件                                               |                    |
+| Capacity Reservations | 容量预存         |                    |          | 在特定AZ中为任何持续时间预留容量                                         |                    | you book a room for a period with full price even you don’t stay in it                                                        |
+
+
+#### On Demand（按需实例 | 短期）
+* 为使用的东西付费｡
+  * Linux或Windows，在第一分钟后按秒计费
+  * 其他操作系统，按小时计费｡
+* 它的成本最高，但没有预付款，也没有长期承诺｡
+* Use Case
+  * 对于短期和不间断的工作负载，(无法预测应用程序的行为)
+
+#### Reserved（保留实例 | 长期 (1 & 3 years)）
+* 提供72%的折扣｡
+* 保留了一个特定的实例属性｡(实例类型､区域､租赁､OS)
+* 预订期(Reservation Period)：一年或三年，时间越长折扣大
+* 预付款(Payment Options)：支付越多折扣越大（不预支付、部分预支付、全额预支付）
+* 范围(Scope)： Regional or Zonal ？在特定的AZ（Availability Zone）中保留容量｡
+* Use Case
+  * 稳定状态使用的应用程序，例如，用于数据库｡
+* 可以在市场中买卖保留实例
+
+#### Convertible Reserved（可转换的保留实例 | 长期 (1 & 3 years)）
+* 可以更改实例类型（实例系列 操作系统､ 范围和租约）
+* 灵活性更大，所以折扣更少，最多可获得66%的折扣｡
+
+#### Savings Plans（储蓄计划 | 长期(1 & 3 years)）
+* 与保留实例一样，提供72%的折扣｡
+* 储蓄计划，在未来1 & 3 years每小时花费一定的金额（$10/hour）
+* 超出储蓄计划的使用都将以按需(On Deemand)价格计费｡
+
+* 被锁定到特定的实例家庭和地区｡(在us-east-1中建立M5类型的例证族群｡)
+* 灵活选择
+  * 实例大小（在m5.xlarge, m5.2xlarge等之间切换）
+  * 操作系统（在Linux和Windows等之间切换）
+  * 租赁（在主机､ 专用、默认之间切换）
+
+#### Spot Instances（现货实例 | 短期）
+* 提供90%的折扣。
+* 可靠性差:随时都可能丢失这些实例，如果现货实例价格超过你愿意为现货实例支付的最高价格，那么你就会失去它｡
+* 是AWS中最经济高效的实例，如果您的工作负载具有故障恢复能力，它们将非常有用｡
+* Use Case
+  * 批处理作业
+  * 数据分析
+  * 图像处理
+  * 任何类型的分布式工作负载
+  * 具有灵活的开始和结束时间的工作负载
+* 不适合关键的工作或数据（考试将在这方面对你进行测试｡）Not suitable for critical jobs or databases
+
+#### Dedicated Hosts（专用主机 | 短期 or 长期(1 & 3 years)）
+* 可以独享一台具有EC2实例容量的物理服务器
+* 有合规性要求
+* 需要使用现有的服务器绑定软件许可证
+* 基于每插槽､ 每内核､每虚拟机软件许可证进行计费
+* 购买
+  * 按需购买，按秒付费
+  * 预订一年或三年（不预支付、部分预支付、全额预支付）
+* 最昂贵，因为您实际上需要预留一台物理服务器｡
+* Use Case
+  * 您的软件采用自带许可证的许可模式｡
+  * 您的公司有很强的法规或合规性需求｡
+
+#### Dedicated Instances（专用实例）
+* 实例运行在专用于您的硬件上，这与物理服务器不同｡
+* 与同一帐户中的其他实例共享硬件，并且无法控制实例的位置｡
+* Dedicated Hosts **VS** Dedicated Instances
+  * 专用实例意味着你在自己的硬件上有自己的实例。
+  * 专用主机意味着你可以访问物理服务器本身，它让你可以看到较低级别的硬件｡
+
+#### Capacity Reservations（预留容量）
+* 没有折扣｡
+* 可以在任意持续时间内保留特定AZ中的按需实例｡
+* 可以在需要时随时访问该容量｡
+* 您可以随时保留容量或取消保留｡
+* 唯一的目的是保留容量｡
+* 要将其与区域保留实例或您的储蓄计划相结合，可以获得计费折扣。
+* 无论实例是否运行，都需要为预留容量按需付费｡
+* 非常适合需要在特定AZ中运行的短期不间断工作负载｡
+
+#### 哪种购买选择适合我
+拿度假村来打个比方：
+**On Demand**：付全价，你可以随时来度假村。
+**Reserved**：你提前预定固定服务（房型，温泉……），一年，三年，得到一个很好的折扣，因为我知道你会呆很长时间；根据你的预支付方式（不预支付、部分预支付、全额预支付）可以给你一个很好的折扣
+**Convertible Reserved**：你提前预定可调节的服务，度假过程中可以改变房间类型等。
+**Savings Plans**：我承诺在度假村每个时间断花费固定金额，过程中可以改变房间类型等，超出部分另外支付。
+**Spot**：度假村清库存空房间，捡漏，折扣较大，但是如果有人愿意为你的房间付比你所付的更多的钱，你随时都可以被踢出去｡
+**Dedicated Hosts**：把度假村包场了，我的地盘我说了算。
+**Dedicated Instances**：度假村包了部分场地，被安排在一块区域，私密性比较好。
+**Capacity Reservations**：全款订专属包间，我不去房间也给我留着。可以结合Reserved和Savings Plans得到一点折扣
+
+
+| Price Type                             | Price (per hour)                           |
+| -------------------------------------- | ------------------------------------------ |
+| On-Demand                              | $0.10                                      |
+| Dedicated Host                         | On-Demand Price                            |
+| Capacity Reservations                  | On-Demand Price                            |
+| Dedicated Host Reservation             | Up to 70% off                              |
+| Reserved Convertible Instance (1 year) | $0.071 (No Upfront) - $0.066 (All Upfront) |
+| Reserved Instance (1 year)             | $0.062 (No Upfront) - $0.058 (All Upfront) |
+| EC2 Savings Plan (1 year)              | $0.062 (No Upfront) - $0.058 (All Upfront) |
+| Reserved Instance (3 years)            | $0.043 (No Upfront) - $0.037 (All Upfront) |
+| Spot Instance (Spot Price)             | $0.038 - $0.039 (up to 61% off)            |
