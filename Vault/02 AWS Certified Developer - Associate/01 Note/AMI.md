@@ -9,7 +9,7 @@ AMI = Amazon Machine Image
 * Amazon机器映像，是EC2实例的定制。
   * 创建自己的AMI时，可以定制自己的软件、配置、操作系统、监视工具
   * boot和配置时间更快，因为我们希望安装到EC2实例上的所有软件都将通过AMI预打包。
-* 必须在特定的区域构建AMI
+* 必须在**specific region**（与所有的Region都不一样）构建AMI
   * 为了可以跨区域复制它们。
 * 从不同类型的AMI启动EC2实例。
   * 公共AMI：由AWS提供。（Amazon Linux）
