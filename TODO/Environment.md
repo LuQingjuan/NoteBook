@@ -59,3 +59,28 @@ UEUE
         对应 GNB config 中 `RUs` `nb_tx`
     * --ssb 168
         ???
+    ```
+#### Iperf
+**DL**
+```
+$ iperf -s -u -i 1 -B 60.60.0.1 -p 5001
+
+$ docker exec -it upf bash
+$ iperf -u -b 80M -t 5 -i 1 -p 5001 -c 60.60.0.1
+
+34M
+```
+**UL**
+```
+$ docker exec -it upf bash
+upfd# iperf -s -u -i 1 -p 5001
+
+$ iperf -u -b 128M -t 5 -i 1 -p 5001 -c 10.100.200.2 -B 60.60.0.6
+
+12.4M
+```
+
+#### Ping
+**UL ping**
+`ping -I oaitun_ue1 10.100.200.2`
+    
