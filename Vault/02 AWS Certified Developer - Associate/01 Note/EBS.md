@@ -43,10 +43,10 @@ EBS Volume = Elastic Block Store Volume
   * 性能最高，针对用于关键型､ 低延迟和高吞吐量的工作而设计。
   * io1
   * io2
-* 其低成本HDD卷（Low cost HDD volume）
+* 其低成本HDD卷（Throughput HDD volume）
   * 针对频繁访问的吞吐量密集型工作负载而设计。
   * stl
-* （Lowest cost HDD volume）
+* （Cold HDD volume）
   * 成本最低，针对访问频率较低的工作负载而设计。
   * scl
 
