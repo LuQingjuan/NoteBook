@@ -46,12 +46,12 @@ EFS = Elastic File System
 * Storage Tiers（存储层)
   * 在几天后将文件移动到不同的层。
     * 标准层：用于频繁访问的文件。
-    * 不频繁访问层 (EFS-IA)：文件存储在EFS-IA上时，更便宜。
+    * 不频繁访问层 Infrequent access(EFS-IA)：文件存储在EFS-IA上时，更便宜。
         * 要启用EFS-IA，您必须使用生命周期策略。
         * 假设我们有一些EFS标准的常用文件，但其中一个文件超过60天未被访问。
         * 然后，由于我们共同设置的生命周期策略，文件将移动到不同层中的EFS-IA。
 * Availability and durability
   * Standard： Multi-AZ，适合生产场景使用。如果可用性区域关闭，不会影响EFS文件系统。
-  * One Zone：适合开发场景使用。仅在一个AZ中，默认启用备份。而且它仍然与不常访问的存储层兼容。
+  * EFS One Zone：适合开发场景使用。仅在一个AZ中，默认启用备份。而且它仍然与不常访问的存储层兼容。
 
 可节省约90%的成本。
