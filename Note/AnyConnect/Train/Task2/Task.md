@@ -14,7 +14,11 @@
 1. git merge和cherry-pick的区别
 
 ## 要求
-<font color="red">注：在理解的基础上，练习命令，保存练习记录（截图），并记[Git笔记](Task2/Note/Git.md)和[Vim笔记](Task2/Note/Vim.md)。</font>
+<font color="red">注：在理解的基础上，练习命令，保存练习记录（截图）。
+整理笔记：
+[Git笔记](Note/Git.md)
+[Vim笔记](Note/Vim.md)</font>
+
 1. Git
     能够熟练使用Git工具；通过命令导入、导出diff。
 2. Vim

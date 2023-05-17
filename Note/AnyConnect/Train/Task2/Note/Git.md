@@ -13,6 +13,22 @@
 ### 工作流程
 >TODO
 
+```graphviz
+digraph demo{
+  graph[]
+  node[]
+  edge[]
+
+    Work[label="工作区"]
+    Tmp[label="暂存区"]
+    Version[label="工作流程"]
+    Work->Tmp[label="Todo"];
+    Tmp->Version[label="Todo"];
+    Version->Tmp[label="Todo"];
+    Tmp->Work[label="Todo"];
+}
+```
+
 ## 常用分支详解
 ### Master
 >TODO
