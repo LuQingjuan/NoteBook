@@ -1,0 +1,293 @@
+## 基本信息
+### 源码
+* url:    http://10.167.14.30:8081/gitlab/training/mtc-oai
+* branch: feature_mmWave_nfapi_f1ap
+* commit: 427679609b859b71c5cf32a413aece38e8c14032
+
+### 编译
+```
+source oaienv 
+cd openairinterface5g/cmake_targets/
+./build_oai --phy_simulators
+```
+
+### CI
+```
+cd cmake_targets/autotests
+sudo -E ./run_exec_autotests.bash -c test_case_list.xml
+
+cat cmake_targets/autotests/log/results_autotests.xml
+```
+
+## nr_dlschsim
+### 手动运行
+```
+cd cmake_targets/ran_build/build/
+sudo -E ./nr_dlschsim -R 106 -m9 -s13 -n100
+sudo -E ./nr_dlschsim -R 217 -m15 -s15 -n100
+sudo -E ./nr_dlschsim -R 273 -m19 -s20 -n100
+```
+* log 结果确认：`PDSCH test OK`
+### 参数说明
+`$ sudo -E ./nr_dlschsim -h`
+`./nr_dlschsim -h(elp) -p(extended_prefix) -N cell_id -f output_filename -F input_filename -g channel_model -n n_frames -t Delayspread -s snr0 -S snr1  -y TXant -z RXant -i Intefrence0 -j Interference1 -A interpolation_file -C(alibration offset dB) -N CellId`
+
+**-h** This message
+**-p** Use extended prefix mode
+**-V** Enable VCD dumb functions
+**-n** Number of frames to simulate
+**-s** Starting SNR, runs from SNR0 to SNR0 + 5 dB.  If n_frames is 1 then just SNR is simulated
+**-S** Ending SNR, runs from SNR0 to SNR1
+~~**-t** Delay spread for multipath channel~~
+**-g** [A,B,C,D,E,F,G] Use 3GPP SCM (A,B,C,D) or 36-101 (E-EPA,F-EVA,G-ETU) models (ignores delay spread and Ricean factor)
+**-y** Number of TX antennas used in eNB
+**-z** Number of RX antennas used in UE
+**-M** Multiple SSB positions in burst
+**-N** Nid_cell
+**-R** N_RB_DL
+~~**-O** oversampling factor (1,2,4,8,16)~~
+~~**-A** Interpolation_filname Run with Abstraction to generate Scatter plot using interpolation polynomial in file~~
+**-F** Input filename (.txt format) for RX conformance testing
+**-d** number of dlsch threads, 0: no dlsch parallelization
+
+| 参数   | 默认值         | 说明                                                                                                                                                                                           |
+| ------ | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **-h** |                | 帮助文档                                                                                                                                                                                       |
+| **-d** | 0              | dlsch线程数<br>0：无dlsch并行化                                                                                                                                                                |
+| **-g** | AWGN           | 'A':(3GPP SCM) SCM_A<br>'B':(3GPP SCM) SCM_B<br>'C':(3GPP SCM) SCM_C<br>'D':(3GPP SCM) SCM_D<br>'E':(36-101) E-EPA<br>'F':(36-101) F-EVA<br>'G':(36-101) G-ETU（<br>忽略延迟扩展和Ricean因子） |
+| **-n** | 1              | 要模拟的帧数                                                                                                                                                                                   |
+| **-s** | -2.0           | 起始SNR，从SNR0运行到SNR0+5dB<br>如果n_frames为1，则仅模拟SNR                                                                                                                                  |
+| **-V** | false(0)       | 启用VCD功能                                                                                                                                                                                    |
+| **-S** | 2.0            | 结束SNR，从SNR0运行到SNR1                                                                                                                                                                      |
+| **-p** | false(0)       | 使用扩展前缀模式                                                                                                                                                                               |
+| **-y** | 1              | eNB中使用的TX天线数量                                                                                                                                                                          |
+| **-z** | 1              | UE中使用的RX天线数量                                                                                                                                                                           |
+| **-M** | 0x01           | 突发中的多个SSB位置                                                                                                                                                                            |
+| **-N** | 0              | LTE 一共定义了504 个不同的PCI（即NID cell，取值范围0 ~ 503）                                                                                                                                   |
+| **-R** | 106            | N_RB_DL                                                                                                                                                                                        |
+| **-F** | NULL           | RX一致性测试的输入文件名（.txt格式）                                                                                                                                                           |
+| **-P** | 0              | PBCH相位（0,1,2,3）                                                                                                                                                                            |
+| **-L** | OAILOG_WARNING | 日志级别:<br>OAILOG_DISABLE -1<br>OAILOG_ERR      0<br>OAILOG_WARNING  1<br>OAILOG_ANALYSIS 2<br>OAILOG_INFO     3<br>OAILOG_DEBUG    4<br>OAILOG_TRACE    5                                   |
+| **-m** | 9              | Imcs                                                                                                                                                                                           |
+| **-l** | 12             | nb_symb_sch                                                                                                                                                                                    |
+| **-r** | 50             | nb_rb                                                                                                                                                                                          |
+| **-X** |                | strncpy(gNBthreads, optarg, sizeof(gNBthreads)-1);<br>gNBthreads[sizeof(gNBthreads)-1]=0;                                                                                                      |
+
+## nr_dlsim
+### 手动运行
+```
+cd cmake_targets/ran_build/build/
+sudo -E ./nr_dlsim -n100 -R106 -b106 -s5
+sudo -E ./nr_dlsim -n100 -R217 -b217 -s5
+sudo -E ./nr_dlsim -n100 -R273 -b273 -s5
+sudo -E ./nr_dlsim -n100 -s1 -S2 -t25
+sudo -E ./nr_dlsim -n100 -s1 -S2 -t33
+sudo -E ./nr_dlsim -n100 -s5 -S7 -t50
+sudo -E ./nr_dlsim -n100 -m0 -e0 -R25 -b25 -i 2 1 0
+sudo -E ./nr_dlsim -n100 -R106 -a25 -s5
+sudo -E ./nr_dlsim -n100 -R106 -a51 -s5
+sudo -E ./nr_dlsim -n100 -R217 -b100 -s5
+sudo -E ./nr_dlsim -n100 -R217 -a80 -s5
+sudo -E ./nr_dlsim -n100 -R217 -a110 -s5 -b100
+sudo -E ./nr_dlsim -n100 -e27 -s30
+sudo -E ./nr_dlsim -n100 -e16 -s11 -S13
+sudo -E ./nr_dlsim -n100 -q1 -e26 -s30
+sudo -E ./nr_dlsim -n100 -e0 -t95 -S-1.0 -i 2 1 0
+sudo -E ./nr_dlsim -n10 -s20 -U 3 0 0 2 -gR -x1 -y4 -z4
+sudo -E ./nr_dlsim -n10 -s20 -U 3 0 0 2 -gR -x2 -y4 -z4
+sudo -E ./nr_dlsim -n10 -s20 -U 3 0 0 2 -x4 -y4 -z4
+sudo -E ./nr_dlsim -n100 -s5 -T 2 2 2
+sudo -E ./nr_dlsim -n100 -s5 -T 2 1 2
+sudo -E ./nr_dlsim -n100 -s5 -T 2 0 4
+sudo -E ./nr_dlsim -n100 -s5 -S7 -U 2 0 1
+sudo -E ./nr_dlsim -n100 -s5 -S7 -U 2 0 2
+sudo -E ./nr_dlsim -n100 -s5 -S7 -U 2 1 3
+```
+* log 结果确认：`PDSCH test OK`
+### 参数说明
+`$ sudo -E ./nr_dlsim -h`
+`./nr_dlsim -h(elp) -p(extended_prefix) -N cell_id -f output_filename -F input_filename -g channel_model -n n_frames -s snr0 -S snr1 -x transmission_mode -y TXant -z RXant -i Intefrence0 -j Interference1 -A interpolation_file -C(alibration offset dB) -N CellId`
+**-h** This message
+**-L** <log level, 0(errors), 1(warning), 2(analysis), 3(info), 4(debug), 5(trace)>
+**-n** Number of frames to simulate
+**-s** Starting SNR, runs from SNR0 to SNR0 + 5 dB.  If n_frames is 1 then just SNR is simulated
+**-S** Ending SNR, runs from SNR0 to SNR1
+**-g** [A,B,C,D,E,F,G,R] Use 3GPP SCM (A,B,C,D) or 36-101 (E-EPA,F-EVA,G-ETU) models or R for MIMO model (ignores delay spread and Ricean factor)
+**-y** Number of TX antennas used in gNB
+**-z** Number of RX antennas used in UE
+**-x** Num of layer for PDSCH
+**-p** Precoding matrix index
+**-i** Change channel estimation technique. Arguments list: Frequency domain {0:Linear interpolation, 1:PRB based averaging}, Time domain {0:Estimates of last DMRS symbol, 1:Average of DMRS symbols}
+**-R** N_RB_DL
+~~**-O** oversampling factor (1,2,4,8,16)~~
+~~**-A** Interpolation_filname Run with Abstraction to generate Scatter plot using interpolation polynomial in file~~
+**-f** raw file containing RRC configuration (generated by gNB)
+**-F** Input filename (.txt format) for RX conformance testing
+~~**-o** CORESET offset~~
+**-a** Start PRB for PDSCH
+**-b** Number of PRB for PDSCH
+~~**-c** Start symbol for PDSCH (fixed for now)~~
+~~**-j** Number of symbols for PDSCH (fixed for now)~~
+**-e** MSC index
+**-q** MCS Table index
+**-t** Acceptable effective throughput (in percentage)
+**-I** Maximum LDPC decoder iterations
+**-T** Enable PTRS, arguments list L_PTRS{0,1,2} K_PTRS{2,4}, e.g. -T 2 0 2 
+**-U** Change DMRS Config, arguments list DMRS TYPE{0=A,1=B} DMRS AddPos{0:2} DMRS ConfType{1:2}, e.g. -U 3 0 2 1 
+**-P** Print DLSCH performances
+**-v** Maximum number of rounds
+**-w** Write txdata to binary file (one frame)
+**-d** number of dlsch threads, 0: no dlsch parallelization
+**-X** gNB thread pool configuration, n => no threads
+**-Y** Run initial sync in UE
+| 参数   | 默认值                            | 说明                                                                                                                                                                                                                       |
+| ------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **-h** |                                   | 帮助文档                                                                                                                                                                                                                   |
+| **-f** | NULL                              | 包含RRC配置的原始文件（由gNB生成）                                                                                                                                                                                         |
+| **-g** | AWGN                              | 'A':(3GPP SCM) SCM_A<br>'B':(3GPP SCM) SCM_B<br>'C':(3GPP SCM) SCM_C<br>'D':(3GPP SCM) SCM_D<br>'E':(36-101) E-EPA<br>'F':(36-101) F-EVA<br>'G':(36-101) G-ETU<br>'R':(MIMO模型) Rayleigh1<br>（忽略延迟扩展和Ricean因子） |
+| **-i** | 0                                 | 改变信道估计技术。<br>频域:<br>0:线性插值<br>1:基于PRB的平均<br>时域:<br>0:最后一个DMRS符号的估计<br>1:DMRS符号平均｝                                                                                                      |
+| **-n** | 1                                 | 要模拟的帧数                                                                                                                                                                                                               |
+| **-s** | -2.0                              | 起始SNR，从SNR0运行到SNR0+5dB<br>如果n_frames为1，则仅模拟SNR                                                                                                                                                              |
+| **-S** | 2.0                               | 结束SNR，从SNR0运行到SNR1                                                                                                                                                                                                  |
+| **-x** | 1                                 | PDSCH的层数（1,2,3,4）                                                                                                                                                                                                     |
+| **-p** | 0                                 | 预编码矩阵索引                                                                                                                                                                                                             |
+| **-v** | 4                                 | 最大轮次                                                                                                                                                                                                                   |
+| **-y** | 1                                 | gNB中使用的TX天线数量（1,2,3,4）                                                                                                                                                                                           |
+| **-z** | 1                                 | UE中使用的RX天线数量（1,2,3,4）                                                                                                                                                                                            |
+| **-R** | 106                               | N_RB_DL                                                                                                                                                                                                                    |
+| **-F** | NULL                              | RX一致性测试的输入文件名（.txt格式）                                                                                                                                                                                       |
+| **-P** | false(0)                          | 打印DLSCH性能print_perf=1;<br>opp_enabled=1;print_perf=1;<br>opp_enabled=1;                                                                                                                                                |
+| **-I** | 5                                 | LDPC解码器最大迭代次数                                                                                                                                                                                                     |
+| **-L** | OAILOG_WARNING                    | 日志级别:<br>OAILOG_DISABLE -1<br>OAILOG_ERR      0<br>OAILOG_WARNING  1<br>OAILOG_ANALYSIS 2<br>OAILOG_INFO     3<br>OAILOG_DEBUG    4<br>OAILOG_TRACE    5                                                               |
+| **-a** | -1                                | PDSCH的启动PRB                                                                                                                                                                                                             |
+| **-b** | -1                                | PDSCH的PRB数量                                                                                                                                                                                                             |
+| **-d** | 0                                 | dlsch线程数<br>0：无dlsch并行化                                                                                                                                                                                            |
+| **-e** | -1                                | MSC索引                                                                                                                                                                                                                    |
+| **-q** | 0                                 | MCS表索引                                                                                                                                                                                                                  |
+| **-m** | 1                                 | mu 数字索引                                                                                                                                                                                                                |
+| **-t** | 0.7                               | 可接受的有效吞吐量（百分比）                                                                                                                                                                                               |
+| **-w** | NULL                              | 将txdata写入二进制文件（一帧）（txdata.dat）                                                                                                                                                                               |
+| **-T** | false(0) ptrs_arg[2] = {-1,-1}    | 启用PTRS，参数列表L_PTRS｛0，1，2｝K_PTRS{2，4｝，例如-T 2 0 2                                                                                                                                                             |
+| **-U** | false(0) dmrs_arg[3] = {-1,-1,-1} | 更改DMRS配置，参数列表DMRS类型｛0=A，1=B｝DMRS AddPos｛0:2｝DMRSConfType｛1:2｝，例如-U 3 0 2 1                                                                                                                            |
+| **-X** |                                   | gNB线程池配置，n=>无线程                                                                                                                                                                                                   |
+| **-Y** | false(0)                          | 在UE中运行初始同步                                                                                                                                                                                                         |
+
+## nr_pbchsim
+### 手动运行
+```
+cd cmake_targets/ran_build/build/
+sudo -E ./nr_pbchsim -s-11 -S-8 -n10 -R106
+sudo -E ./nr_pbchsim -s-11 -S-8 -n10 -o8000 -I -R106
+sudo -E ./nr_pbchsim -s-11 -S-8 -n10 -R106 -O6
+sudo -E ./nr_pbchsim -s-10 -S-8 -n10 -R217
+sudo -E ./nr_pbchsim -s-10 -S-8 -n10 -o8000 -I -R217
+sudo -E ./nr_pbchsim -s-10 -S-8 -n10 -R273
+sudo -E ./nr_pbchsim -s-10 -S-8 -n10 -o8000 -I -R273
+```
+* log 结果确认：`PBCH test OK`
+### 参数说明
+`$ sudo -E ./nr_pbchsim -h`
+`./nr_pbchsim -F input_filename -g channel_mod -h(elp) -I(nitial sync) -L log_lvl -n n_frames -M SSBs -n frames -N cell_id -o FO -P phase -r seed -R RBs -s snr0 -S snr1 -x transmission_mode -y TXant -z RXant`
+**-F** Input filename (.txt format) for RX conformance testing
+**-g** [A,B,C,D,E,F,G] Use 3GPP SCM (A,B,C,D) or 36-101 (E-EPA,F-EVA,G-ETU) models (ignores delay spread and Ricean factor)
+**-h** This message
+**-I** run initial sync with target error rate 0.1
+**-L** set the log level (-1 disable, 0 error, 1 warning, 2 info, 3 debug, 4 trace)
+**-m** Numerology index
+**-M** Multiple SSB positions in burst
+**-n** Number of frames to simulate
+**-N** Nid_cell
+**-o** Carrier frequency offset in Hz
+**-O** SSB subcarrier offset
+**-P** PBCH phase, allowed values 0-3
+**-r** set the random number generator seed (default: 0 = current time)
+**-R** N_RB_DL
+**-s** Starting SNR, runs from SNR0 to SNR0 + 10 dB if not -S given. If -n 1, then just SNR is simulated
+**-S** Ending SNR, runs from SNR0 to SNR1
+**-x** Transmission mode (1,2,6 for the moment)
+**-y** Number of TX antennas used in eNB
+**-z** Number of RX antennas used in UE
+
+| 参数   | 默认值         | 说明                                                                                                                                                                                           |
+| ------ | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **-h** |                | 帮助文档                                                                                                                                                                                       |
+| **-F** | NULL           | RX一致性测试的输入文件名（.txt格式）                                                                                                                                                           |
+| **-g** | AWGN           | 'A':(3GPP SCM) SCM_A<br>'B':(3GPP SCM) SCM_B<br>'C':(3GPP SCM) SCM_C<br>'D':(3GPP SCM) SCM_D<br>'E':(36-101) E-EPA<br>'F':(36-101) F-EVA<br>'G':(36-101) G-ETU<br>（忽略延迟扩展和Ricean因子） |
+| **-I** | false(0)       | 运行初始同步，目标错误率为0.1                                                                                                                                                                  |
+| **-L** | OAILOG_WARNING | 日志级别:<br>OAILOG_DISABLE -1<br>OAILOG_ERR      0<br>OAILOG_WARNING  1<br>OAILOG_ANALYSIS 2<br>OAILOG_INFO     3<br>OAILOG_DEBUG    4<br>OAILOG_TRACE    5                                   |
+| **-m** | 1              | mu 数字索引                                                                                                                                                                                    |
+| **-M** | 0x01           | 突发中的多个SSB位置                                                                                                                                                                            |
+| **-n** | 1              | 要模拟的帧数                                                                                                                                                                                   |
+| **-N** | 0              | LTE 一共定义了504 个不同的PCI（即NID cell，取值范围0 ~ 503）                                                                                                                                   |
+| **-O** | 0              | SSB子载波偏移                                                                                                                                                                                  |
+| **-o** | 0              | 载波频率偏移（Hz）                                                                                                                                                                             |
+| **-P** | 0              | PBCH相位（0,1,2,3）                                                                                                                                                                            |
+| **-r** | 0              | 设置随机数生成器种子（默认值：0=当前时间）                                                                                                                                                     |
+| **-R** | 273            | N_RB_DL                                                                                                                                                                                        |
+| **-s** | -2.0           | 起始SNR，从SNR0运行到SNR0+10 dB（如果未给出-s）。<br>如果-n 1，则仅模拟SNR                                                                                                                     |
+| **-S** | 2.0            | 结束SNR，从SNR0运行到SNR1                                                                                                                                                                      |
+| **-x** | 1              | 传输模式（目前为1,2,6）                                                                                                                                                                        |
+| **-y** | 1              | eNB中使用的TX天线数量（目前为1,2）                                                                                                                                                             |
+| **-z** | 1              | UE中使用的RX天线数量（目前为1,2）                                                                                                                                                              |
+
+
+## nr_prachsim
+### 手动运行
+```
+cd cmake_targets/ran_build/build/
+sudo -E ./nr_prachsim -a -s -30 -n 100 -p 63 -R 106
+sudo -E ./nr_prachsim -a -s -30 -n 100 -p 63 -R 217
+sudo -E ./nr_prachsim -a -s -30 -n 100 -p 63 -R 273
+sudo -E ./nr_prachsim -a -s -30 -n 100 -p 63 -R 106 -c 4
+sudo -E ./nr_prachsim -a -s -30 -n 100 -p 32 -R 32 -m 3 -c52
+sudo -E ./nr_prachsim -a -s -30 -n 100 -p 32 -R 66 -m 3 -c52
+sudo -E ./nr_prachsim -a -s -30 -n 100 -R 66 -m 3 -c52 -H
+sudo -E ./nr_prachsim -a -s -30 -n 100 -p 99 -R 25 -m 0
+```
+* log 结果确认：`PRACH test OK`
+### 参数说明
+`$ sudo -E ./nr_prachsim -h`
+`./nr_prachsim -h(elp) -a(wgn on) -p(extended_prefix) -N cell_id -f output_filename -F input_filename -g channel_model -n n_frames -s snr0 -S snr1 -x transmission_mode -y TXant -z RXant -i Intefrence0 -j Interference1 -A interpolation_file -C(alibration offset dB) -N CellId`
+**-h** This message
+**-a** Use AWGN channel and not multipath
+**-n** Number of frames to simulate
+**-s** Starting SNR, runs from SNR0 to SNR0 + 5 dB.  If n_frames is 1 then just SNR is simulated
+**-S** Ending SNR, runs from SNR0 to SNR1
+**-g** [A,B,C,D,E,F,G,I,N] Use 3GPP SCM (A,B,C,D) or 36-101 (E-EPA,F-EVA,G-ETU) or Rayleigh1 (I) or Rayleigh1_800 (N) models (ignores delay spread and Ricean factor)
+**-z** Number of RX antennas used in gNB
+**-N** Nid_cell
+~~**-O** oversampling factor (1,2,4,8,16)~~
+**-d** Channel delay 
+**-v** Starting UE velocity in km/h, runs from 'v' to 'v+50km/h'. If n_frames is 1 just 'v' is simulated 
+**-V** Ending UE velocity in km/h, runs from 'v' to 'V'-L rootSequenceIndex (0-837)
+**-Z** NCS_config (ZeroCorrelationZone) (0-15)
+**-H** Run with High-Speed Flag enabled 
+**-R** Number of PRB (6,15,25,50,75,100)
+**-F** Input filename (.txt format) for RX conformance testing
+
+| 参数   | 默认值      | 说明                                                                                                                                                                                                                                                                                                                             |
+| ------ | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **-h** |             | 帮助文档                                                                                                                                                                                                                                                                                                                         |
+| **-a** | false(0)    | 使用AWGN信道，而不是多路径                                                                                                                                                                                                                                                                                                       |
+| **-c** | 98          | config_index                                                                                                                                                                                                                                                                                                                     |
+| **-l** | OAILOG_INFO | 日志级别:<br>OAILOG_DISABLE -1<br>OAILOG_ERR      0<br>OAILOG_WARNING  1<br>OAILOG_ANALYSIS 2<br>OAILOG_INFO     3<br>OAILOG_DEBUG    4<br>OAILOG_TRACE    5                                                                                                                                                                     |
+| **-r** | 0           | msg1_frequencystart                                                                                                                                                                                                                                                                                                              |
+| **-d** | 0           | 信道延迟                                                                                                                                                                                                                                                                                                                         |
+| **-g** |             | 'A':(3GPP SCM) SCM_A<br>'B':(3GPP SCM) SCM_B<br>'C':(3GPP SCM) SCM_C<br>'D':(3GPP SCM) SCM_D<br>'E':(36-101) E-EPA<br>'F':(36-101) F-EVA<br>'G':(36-101) G-ETU<br>'H':Rayleigh8<br>'I': Rayleigh1<br>'J':Rayleigh1_corr<br>'K':Rayleigh1_anticorr<br>'L':Rice8<br>'M':Rice1<br>'N':Rayleigh1_800<br>（忽略延迟扩展和Ricean因子） |
+| **-E** | 0           | threequarter_fs                                                                                                                                                                                                                                                                                                                  |
+| **-m** | 1           | mu                                                                                                                                                                                                                                                                                                                               |
+| **-n** | 1           | 要模拟的帧数                                                                                                                                                                                                                                                                                                                     |
+| **-s** | -2.0        | 起始SNR，从SNR0运行到SNR0+5dB。如果n_frames为1，则仅模拟SNR                                                                                                                                                                                                                                                                      |
+| **-S** | 0.0         | 结束SNR，从SNR0运行到SNR1                                                                                                                                                                                                                                                                                                        |
+| **-p** | 0           | preamble_tx                                                                                                                                                                                                                                                                                                                      |
+| **-v** | 0.0         | 起始UE速度（km/h），从“v”到“v+50km/h”。如果n_frames为1，则仅模拟“v”                                                                                                                                                                                                                                                              |
+| **-V** | 0.0         | 终端UE速度（km/h），从“V”到“V”-L rootSequenceIndex（0-837）                                                                                                                                                                                                                                                                      |
+| **-Z** | 0           | NCS_config（零相关区）（0,1,2......13,14,15）                                                                                                                                                                                                                                                                                    |
+| **-H** | false(0)    | 启用高速标志的H Run                                                                                                                                                                                                                                                                                                              |
+| **-L** | 1           | rootSequenceIndex                                                                                                                                                                                                                                                                                                                |
+| **-x** | 1           | 传输模式（目前为1,2,6）                                                                                                                                                                                                                                                                                                          |
+| **-y** | 1           | UE中使用的TX天线数量（目前为1,2）                                                                                                                                                                                                                                                                                                |
+| **-z** | 1           | gNB中使用的RX天线数量（目前为1,2）                                                                                                                                                                                                                                                                                               |
+| **-N** | 0           | LTE 一共定义了504 个不同的PCI（即NID cell，取值范围0 ~ 503）                                                                                                                                                                                                                                                                     |
+| **-R** | 106         | PRB数量（6,15,25,50,75100）                                                                                                                                                                                                                                                                                                      |
+| **-F** | NULL        | RX一致性测试的输入文件名（.txt格式）                                                                                                                                                                                                                                                                                             |

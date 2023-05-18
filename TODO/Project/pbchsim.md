@@ -17,6 +17,15 @@ cat cmake_targets/autotests/log/results_autotests.xml
 ##### 手动运行
 ```
 cd cmake_targets/ran_build/build/
+./nr_pbchsim -s-11 -S-8 -n10 -R106
+./nr_pbchsim -s-11 -S-8 -n10 -o8000 -I -R106
+./nr_pbchsim -s-11 -S-8 -n10 -R106 -O6
+./nr_pbchsim -s-10 -S-8 -n10 -R217
+./nr_pbchsim -s-10 -S-8 -n10 -o8000 -I -R217
+./nr_pbchsim -s-10 -S-8 -n10 -R273
+./nr_pbchsim -s-10 -S-8 -n10 -o8000 -I -R273
+
+
 ```
 
 ##### 参数说明
@@ -44,243 +53,243 @@ cd cmake_targets/ran_build/build/
 | -z   | -z UE中使用的RX天线数量                                                                                          | Number of RX antennas used in UE                                                                                     |
 
 ##### 代码解析
-* main
+* pbchsim
 ```mermaid
-  sequenceDiagram
-    Note right of main      : int main(int argc, char **argv)
-    Note right of main      : get_softmodem_params()->sa = 1
-    Note right of main      : __attribute__((unused))
-    Note right of main      : cpuf = get_cpu_freq_GHz()
-    alt if ( load_configmodule(argc,argv,CONFIG_ENABLECMDLINEONLY) == 0)
-    end
-    Note right of main      : exit_fun("[NR_PBCHSIM] Error, configuration module init failed\n")
-    loop while ((c = getopt (argc, argv, "F:g:hIL:m:M:n:N:o:O:P:r:R:s:S:x:y:z:")) != -1)
-    end
-    Note right of main      : switch (c)
-    Note right of main      : output_fd = fopen(optarg,"w")
-    alt if (output_fd==NULL)
-    end
-    Note right of main      : exit(-1)
-    Note right of main      : input_fd = fopen(optarg,"r")
-    alt if (input_fd==NULL)
-    end
-    Note right of main      : exit(-1)
-    Note right of main      : switch((char)*optarg)
-    Note right of main      : exit(-1)
-    alt if (pbch_phase>3)
-    end
-    Note right of main      : ricean_factor = pow(10,-.1*atof(optarg))
-    alt if (ricean_factor>1)
-    end
-    Note right of main      : exit(-1)
-    alt if ((transmission_mode!=1) && (transmission_mode!=2) && (transmission_mode!=6))
-    end
-    Note right of main      : exit(-1)
-    alt if ((n_tx==0) || (n_tx>2))
-    end
-    Note right of main      : exit(-1)
-    alt if ((n_rx==0) || (n_rx>2))
-    end
-    Note right of main      : exit(-1)
-    Note right of main      : exit (-1)
-    Note right of main      : randominit(seed)
-    Note right of main      : logInit()
-    Note right of main      : set_glog(loglvl)
-    alt if (snr1set==0)
-    end
-    Note right of main      : nr_phy_config_request_sim_pbchsim(gNB,N_RB_DL,N_RB_DL,mu,Nid_cell,SSB_positions)
-    Note right of main      : set_tdd_config_nr(&gNB->gNB_config, mu, 7, 6, 2, 4)
-    Note right of main      : phy_init_nr_gNB(gNB)
-    Note right of main      : switch (mu)
-    alt if (N_RB_DL == 217)
-    else if (N_RB_DL == 245)
-    else if (N_RB_DL == 273)
-    else if (N_RB_DL == 106)
-    end
-    Note right of main      : else AssertFatal(1==0,"Unsupported numerology for mu %d, N_RB %d\n",mu, N_RB_DL)
-    alt if (N_RB_DL == 66)
-    end
-    Note right of main      : else AssertFatal(1==0,"Unsupported numerology for mu %d, N_RB %d\n",mu, N_RB_DL)
-    alt if(eps!=0.0)
-    end
-    alt if (eps>0)
-    end
-    Note right of main      : gNB2UE = new_channel_desc_scm(n_tx,
-    alt if (gNB2UE==NULL)
-    end
-    Note right of main      : exit(-1)
-    Note right of main      : i=0
-    loop  i<2
-      Note right of main      : 
-      Note right of main      : i++
-    end
-)
-    alt if (pbch_file_fd!=NULL)
-    end
-    Note right of main      : load_pbch_desc(pbch_file_fd)
-    alt if (run_initial_sync==1)  UE->is_synchronized = 0
-    end
-    alt if(eps!=0.0)
-    end
-    alt if (init_nr_ue_signal(UE, 1) != 0)
-    end
-    Note right of main      : exit(-1)
-    Note right of main      : nr_gold_pbch(UE)
-    Note right of main      : __attribute__ ((aligned(32))) c16_t rxdataF[UE->frame_parms.nb_antennas_rx][rxdataF_sz]
-    alt if (input_fd==NULL)
-    end
-    Note right of main      : i=0
-    loop  i<frame_parms->Lmax
-      Note right of main      : 
-      Note right of main      : i++
-    end
-)
-    alt if((SSB_positions >> i) & 0x01)
-    end
-    Note right of main      : start_symbol = nr_get_ssb_start_symbol(frame_parms,i)
-    Note right of main      : aa=0
-    loop  aa<gNB->frame_parms.nb_antennas_tx
-      Note right of main      : 
-      Note right of main      : aa++
-    end
-)
-    Note right of main      : nr_common_signal_procedures (gNB,frame,slot,msgDataTx.ssb[i].ssb_pdu)
-    Note right of main      : aa=0
-    loop  aa<gNB->frame_parms.nb_antennas_tx
-      Note right of main      : 
-      Note right of main      : aa++
-    end
-)
-    alt if (cyclic_prefix_type == 1)
-    end
-    Note right of main      : apply_nr_rotation(frame_parms,
-    Note right of main      : PHY_ofdm_mod((int *)gNB->common_vars.txdataF[aa],
-    Note right of main      : &txdata[aa][frame_parms->get_samples_slot_timestamp(slot,frame_parms,0)],
-    Note right of main      : apply_nr_rotation(frame_parms,
-    Note right of main      : &txdata[aa][frame_parms->get_samples_slot_timestamp(slot,frame_parms,0)],
-    Note right of main      : PHY_ofdm_mod((int *)gNB->common_vars.txdataF[aa],
-    Note right of main      : (int*)&txdata[aa][frame_parms->get_samples_slot_timestamp(slot,frame_parms,0)],
-    Note right of main      : PHY_ofdm_mod((int *)&gNB->common_vars.txdataF[aa][frame_parms->ofdm_symbol_size],
-    Note right of main      : (int*)&txdata[aa][frame_parms->get_samples_slot_timestamp(slot,frame_parms,0)+frame_parms->nb_prefix_samples0+frame_parms->ofdm_symbol_size],
-    alt if (gNB->frame_parms.nb_antennas_tx>1)
-    end
-    alt if (fread(txdata[0],
-    end
-    alt if (gNB->frame_parms.nb_antennas_tx>1)
-    end
-    alt if (output_fd) 
-    end
-    Note right of main      : SNR=snr0
-    loop  SNR<snr1
-      Note right of main      : 
-      Note right of main      : SNR+=.2
-    end
-)
-    Note right of main      : trial=0
-    loop  trial<n_trials
-      Note right of main      : 
-      Note right of main      : trial++
-    end
-)
-    Note right of main      : i=0
-    loop  i<frame_length_complex_samples
-      Note right of main      : 
-      Note right of main      : i++
-    end
-)
-    Note right of main      : aa=0
-    loop  aa<frame_parms->nb_antennas_tx
-      Note right of main      : 
-      Note right of main      : aa++
-    end
-)
-    Note right of main      : sigma2_dB = 20*log10((double)AMP/4)-SNR
-    Note right of main      : sigma2 = pow(10,sigma2_dB/10)
-    alt if(eps!=0.0)
-    end
-    Note right of main      : rf_rx(r_re,  // real part of txdata
-    Note right of main      : 0.0); // IQ phase imbalance (rad)
-    Note right of main      : i=0
-    loop  i<frame_length_complex_samples
-      Note right of main      : 
-      Note right of main      : i++
-    end
-)
-    Note right of main      : aa=0
-    loop  aa<frame_parms->nb_antennas_rx
-      Note right of main      : 
-      Note right of main      : aa++
-    end
-)
-    Note right of main      : ((short*) UE->common_vars.rxdata[aa])[2*i]   = (short) ((r_re[aa][i] + sqrt(sigma2/2)*gaussdouble(0.0,1.0)))
-    Note right of main      : ((short*) UE->common_vars.rxdata[aa])[2*i+1] = (short) ((r_im[aa][i] + sqrt(sigma2/2)*gaussdouble(0.0,1.0)))
-    alt if (n_trials==1)
-    end
-    alt if (gNB->frame_parms.nb_antennas_tx>1)
-    end
-    alt if (UE->is_synchronized == 0)
-    end
-    Note right of main      : ret = nr_initial_sync(&proc, UE, 1, 0)
-    alt if (ret<0) n_errors++
-    end
-    Note right of main      : __attribute__((aligned(32))) struct complex16 dl_ch_estimates[frame_parms->nb_antennas_rx][estimateSz]
-    Note right of main      : __attribute__((aligned(32))) struct complex16 dl_ch_estimates_time[frame_parms->nb_antennas_rx][frame_parms->ofdm_symbol_size]
-    loop while (!((SSB_positions >> ssb_index) & 0x01))
-    end
-    Note right of main      : UE->symbol_offset = nr_get_ssb_start_symbol(frame_parms, ssb_index)
-    Note right of main      : int i=UE->symbol_offset+1
-    loop  i<UE->symbol_offset+4
-      Note right of main      : 
-      Note right of main      : i++
-    end
-)
-    Note right of main      : nr_slot_fep(UE,
-    Note right of main      : nr_pbch_channel_estimation(UE,estimateSz, dl_ch_estimates, dl_ch_estimates_time, &proc, 
-    Note right of main      : ret = nr_rx_pbch(UE,
-    alt if (ret==0)
-    end
-    Note right of main      : int i=0
-    loop  i<8
-      Note right of main      : 
-      Note right of main      : i++
-    end
-)
-    Note right of main      : i=0
-    loop i<3
-      Note right of main      : 
-      Note right of main      : i++
-    end
-)
-    alt if (payload_ret!=4) 
-    end
-    alt if (ret!=0) n_errors++
-    end
-    alt if (((float)n_errors/(float)n_trials <= target_error_rate) && (n_errors_payload==0))
-    end
-    alt if (n_trials==1)
-    end
-    Note right of main      : free_channel_desc_scm(gNB2UE)
-    Note right of main      : int i = 0
-    loop  i < nb_slots_to_set
-      Note right of main      : 
-      Note right of main      : ++i
-    end
-)
-    Note right of main      : phy_free_nr_gNB(gNB)
-    Note right of main      : term_nr_ue_signal(UE, 1)
-    Note right of main      : i=0
-    loop  i<2
-      Note right of main      : 
-      Note right of main      : i++
-    end
-)
-    alt if (output_fd)
-    end
-    Note right of main      : fclose(output_fd)
-    alt if (input_fd)
-    end
-    Note right of main      : fclose(input_fd)
-    Note right of main      : loader_reset()
-    Note right of main      : logTerm()
-    Note right of main      : return(n_errors)
+    sequenceDiagram
+Note right of main :            int main(int argc, char **argv)
+Note right of main :            get_softmodem_params()->sa = 1
+Note right of main :            __attribute__((unused))
+Note right of main :            cpuf = get_cpu_freq_GHz()
+                                alt if ( load_configmodule(argc,argv,CONFIG_ENABLECMDLINEONLY) == 0)
+                                end
+Note right of main :            exit_fun("[NR_PBCHSIM] Error, configuration module init failed\n")
+                                loop while ((c = getopt (argc, argv, "F:g:hIL:m:M:n:N:o:O:P:r:R:s:S:x:y:z:")) != -1)
+                                end
+Note right of main :            switch (c)
+Note right of main :            output_fd = fopen(optarg,"w")
+                                alt if (output_fd==NULL)
+                                end
+Note right of main :            exit(-1)
+Note right of main :            input_fd = fopen(optarg,"r")
+                                alt if (input_fd==NULL)
+                                end
+Note right of main :            exit(-1)
+Note right of main :            switch((char)*optarg)
+Note right of main :            exit(-1)
+                                alt if (pbch_phase>3)
+                                end
+Note right of main :            ricean_factor = pow(10,-.1*atof(optarg))
+                                alt if (ricean_factor>1)
+                                end
+Note right of main :            exit(-1)
+                                alt if ((transmission_mode!=1) && (transmission_mode!=2) && (transmission_mode!=6))
+                                end
+Note right of main :            exit(-1)
+                                alt if ((n_tx==0) || (n_tx>2))
+                                end
+Note right of main :            exit(-1)
+                                alt if ((n_rx==0) || (n_rx>2))
+                                end
+Note right of main :            exit(-1)
+Note right of main :            exit (-1)
+Note right of main :            randominit(seed)
+Note right of main :            logInit()
+Note right of main :            set_glog(loglvl)
+                                alt if (snr1set==0)
+                                end
+Note right of main :            nr_phy_config_request_sim_pbchsim(gNB,N_RB_DL,N_RB_DL,mu,Nid_cell,SSB_positions)
+Note right of main :            set_tdd_config_nr(&gNB->gNB_config, mu, 7, 6, 2, 4)
+Note right of main :            phy_init_nr_gNB(gNB)
+Note right of main :            switch (mu)
+                                alt if (N_RB_DL == 217)
+                                else if (N_RB_DL == 245)
+                                else if (N_RB_DL == 273)
+                                else if (N_RB_DL == 106)
+                                end
+Note right of main :            else AssertFatal(1==0,"Unsupported numerology for mu %d, N_RB %d\n",mu, N_RB_DL)
+                                alt if (N_RB_DL == 66)
+                                end
+Note right of main :            else AssertFatal(1==0,"Unsupported numerology for mu %d, N_RB %d\n",mu, N_RB_DL)
+                                alt if(eps!=0.0)
+                                end
+                                alt if (eps>0)
+                                end
+Note right of main :            gNB2UE = new_channel_desc_scm(n_tx,
+                                alt if (gNB2UE==NULL)
+                                end
+Note right of main :            exit(-1)
+Note right of main :            i=0
+                                loop i<2
+Note right of main :
+Note right of main :            i++
+                                end
+                            )
+                                alt if (pbch_file_fd!=NULL)
+                                end
+Note right of main :            load_pbch_desc(pbch_file_fd)
+                                alt if (run_initial_sync==1)  UE->is_synchronized = 0
+                                end
+                                alt if(eps!=0.0)
+                                end
+                                alt if (init_nr_ue_signal(UE, 1) != 0)
+                                end
+Note right of main :            exit(-1)
+Note right of main :            nr_gold_pbch(UE)
+Note right of main :            __attribute__ ((aligned(32))) c16_t rxdataF[UE->frame_parms.nb_antennas_rx][rxdataF_sz]
+                                alt if (input_fd==NULL)
+                                end
+Note right of main :            i=0
+                                loop i<frame_parms->Lmax
+Note right of main :
+Note right of main :            i++
+                                end
+                            )
+                                alt if((SSB_positions >> i) & 0x01)
+                                end
+Note right of main :            start_symbol = nr_get_ssb_start_symbol(frame_parms,i)
+Note right of main :            aa=0
+                                loop aa<gNB->frame_parms.nb_antennas_tx
+Note right of main :
+Note right of main :            aa++
+                                end
+                            )
+Note right of main :            nr_common_signal_procedures (gNB,frame,slot,msgDataTx.ssb[i].ssb_pdu)
+Note right of main :            aa=0
+                                loop aa<gNB->frame_parms.nb_antennas_tx
+Note right of main :
+Note right of main :            aa++
+                                end
+                            )
+                                alt if (cyclic_prefix_type == 1)
+                                end
+Note right of main :            apply_nr_rotation(frame_parms,
+Note right of main :            PHY_ofdm_mod((int *)gNB->common_vars.txdataF[aa],
+Note right of main :            &txdata[aa][frame_parms->get_samples_slot_timestamp(slot,frame_parms,0)],
+Note right of main :            apply_nr_rotation(frame_parms,
+Note right of main :            &txdata[aa][frame_parms->get_samples_slot_timestamp(slot,frame_parms,0)],
+Note right of main :            PHY_ofdm_mod((int *)gNB->common_vars.txdataF[aa],
+Note right of main :            (int*)&txdata[aa][frame_parms->get_samples_slot_timestamp(slot,frame_parms,0)],
+Note right of main :            PHY_ofdm_mod((int *)&gNB->common_vars.txdataF[aa][frame_parms->ofdm_symbol_size],
+Note right of main :            (int*)&txdata[aa][frame_parms->get_samples_slot_timestamp(slot,frame_parms,0)+frame_parms->nb_prefix_samples0+frame_parms->ofdm_symbol_size],
+                                alt if (gNB->frame_parms.nb_antennas_tx>1)
+                                end
+                                alt if (fread(txdata[0],
+                                end
+                                alt if (gNB->frame_parms.nb_antennas_tx>1)
+                                end
+                                alt if (output_fd)
+                                end
+Note right of main :            SNR=snr0
+                                loop SNR<snr1
+Note right of main :
+Note right of main :            SNR+=.2
+                                end
+                            )
+Note right of main :            trial=0
+                                loop trial<n_trials
+Note right of main :
+Note right of main :            trial++
+                                end
+                            )
+Note right of main :            i=0
+                                loop i<frame_length_complex_samples
+Note right of main :
+Note right of main :            i++
+                                end
+                            )
+Note right of main :            aa=0
+                                loop aa<frame_parms->nb_antennas_tx
+Note right of main :
+Note right of main :            aa++
+                                end
+                            )
+Note right of main :            sigma2_dB = 20*log10((double)AMP/4)-SNR
+Note right of main :            sigma2 = pow(10,sigma2_dB/10)
+                                alt if(eps!=0.0)
+                                end
+Note right of main :            rf_rx(r_re,  // real part of txdata
+Note right of main :            0.0); // IQ phase imbalance (rad)
+Note right of main :            i=0
+                                loop i<frame_length_complex_samples
+Note right of main :
+Note right of main :            i++
+                                end
+                            )
+Note right of main :            aa=0
+                                loop aa<frame_parms->nb_antennas_rx
+Note right of main :
+Note right of main :            aa++
+                                end
+                            )
+Note right of main :            ((short*) UE->common_vars.rxdata[aa])[2*i]   = (short) ((r_re[aa][i] + sqrt(sigma2/2)*gaussdouble(0.0,1.0)))
+Note right of main :            ((short*) UE->common_vars.rxdata[aa])[2*i+1] = (short) ((r_im[aa][i] + sqrt(sigma2/2)*gaussdouble(0.0,1.0)))
+                                alt if (n_trials==1)
+                                end
+                                alt if (gNB->frame_parms.nb_antennas_tx>1)
+                                end
+                                alt if (UE->is_synchronized == 0)
+                                end
+Note right of main :            ret = nr_initial_sync(&proc, UE, 1, 0)
+                                alt if (ret<0) n_errors++
+                                end
+Note right of main :            __attribute__((aligned(32))) struct complex16 dl_ch_estimates[frame_parms->nb_antennas_rx][estimateSz]
+Note right of main :            __attribute__((aligned(32))) struct complex16 dl_ch_estimates_time[frame_parms->nb_antennas_rx][frame_parms->ofdm_symbol_size]
+                                loop while (!((SSB_positions >> ssb_index) & 0x01))
+                                end
+Note right of main :            UE->symbol_offset = nr_get_ssb_start_symbol(frame_parms, ssb_index)
+Note right of main :            int i=UE->symbol_offset+1
+                                loop i<UE->symbol_offset+4
+Note right of main :
+Note right of main :            i++
+                                end
+                            )
+Note right of main :            nr_slot_fep(UE,
+Note right of main :            nr_pbch_channel_estimation(UE,estimateSz, dl_ch_estimates, dl_ch_estimates_time, &proc,
+Note right of main :            ret = nr_rx_pbch(UE,
+                                alt if (ret==0)
+                                end
+Note right of main :            int i=0
+                                loop i<8
+Note right of main :
+Note right of main :            i++
+                                end
+                            )
+Note right of main :            i=0
+                                loop i<3
+Note right of main :
+Note right of main :            i++
+                                end
+                            )
+                                alt if (payload_ret!=4)
+                                end
+                                alt if (ret!=0) n_errors++
+                                end
+                                alt if (((float)n_errors/(float)n_trials <= target_error_rate) && (n_errors_payload==0))
+                                end
+                                alt if (n_trials==1)
+                                end
+Note right of main :            free_channel_desc_scm(gNB2UE)
+Note right of main :            int i = 0
+                                loop i < nb_slots_to_set
+Note right of main :
+Note right of main :            ++i
+                                end
+                            )
+Note right of main :            phy_free_nr_gNB(gNB)
+Note right of main :            term_nr_ue_signal(UE, 1)
+Note right of main :            i=0
+                                loop i<2
+Note right of main :
+Note right of main :            i++
+                                end
+                            )
+                                alt if (output_fd)
+                                end
+Note right of main :            fclose(output_fd)
+                                alt if (input_fd)
+                                end
+Note right of main :            fclose(input_fd)
+Note right of main :            loader_reset()
+Note right of main :            logTerm()
+Note right of main :            return(n_errors)
 ```

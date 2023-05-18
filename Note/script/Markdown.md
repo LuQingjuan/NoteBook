@@ -291,3 +291,6 @@ cond(no)->op
 # 参考
 [教程向: 在 VS Code 中用 Markdown 做「数字化」学习笔记](https://zhuanlan.zhihu.com/p/366596107)
 [Markdown编辑器快捷键](https://blog.csdn.net/CRW__DREAM/article/details/123085465)
+
+[Markdown语法及原理从入门到高级（可能是全网最全）](https://www.zhihu.com/tardis/bd/art/99319314?source_id=1001)
+[mermaid 语法](http://www.manongjc.com/detail/52-gwmipkfyzvebaax.html)
