@@ -49,9 +49,10 @@ cd cmake_targets/ran_build/build/
 | ?   | -X   | ???            |                                                                                                                                                 | strncpy(gNBthreads, optarg, sizeof(gNBthreads)-1);<br>gNBthreads[sizeof(gNBthreads)-1]=0;                            |
 
 ##### 代码解析
-###### main
+###### dlschsim
 ```mermaid
     sequenceDiagram
+    participant vcd_dumper_thread_rt as VDC
 %%main
 activate main
 Note over main :                                cpuf = get_cpu_freq_GHz()
@@ -144,11 +145,11 @@ Note over main :                                    snr1 = snr0 + 10
                                                 end
                                                 alt if (ouput_vcd)
 Note over main :                                    vcd_signal_dumper_init("/tmp/openair_dump_nr_dlschsim.vcd")<br>在-V的情况下，初始化VCD
-main-->vcd_dumper_thread_rt :                       pthread_create(&vcd_dumper_thread, NULL, vcd_dumper_thread_rt, NULL) < 0
-activate vcd_dumper_thread_rt
-Note over vcd_dumper_thread_rt :                TBD
+main-->VDC :                                        pthread_create(&vcd_dumper_thread, NULL, vcd_dumper_thread_rt, NULL) < 0
+activate VDC
+Note over VDC :                                 TBD
                                                 end
-Note over main :                                gNB2UE = new_channel_desc_scm(n_tx,n_rx,channel_model,61.44e6,0,40e6,DS_TDL,0.0,CORR_LEVEL_LOW,0,0,0,0)
+Note over main :                                gNB2UE = new_channel_desc_scm(n_tx,n_rx,channel_model,61.44e6,0,40e6,DS_TDL,0.0,CORR_LEVEL_LOW,0,0,0,0)<br>创建channel_desc_scm<br>根据不同的channel_mode设置chan_desc
 Note over main :                                initNamedTpool(gNBthreads, &gNB->threadPool, true, "gNB-tpool")
                                                 alt if (gNB2UE == NULL)
 Note over main :                                    exit(-1)
@@ -256,9 +257,6 @@ Note over main :                                end_configmodule()
 Note over main :                                loader_reset()
 Note over main :                                logTerm()
 
-deactivate vcd_dumper_thread_rt
+deactivate VDC
 deactivate main
 ```
-
----
-@import "dl_common.md"
