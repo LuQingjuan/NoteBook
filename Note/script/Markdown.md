@@ -270,6 +270,19 @@ digraph example{
 }
 ```
 
+```graphviz
+digraph structs {
+    node[shape=record];
+    graph[rankdir=LR];
+    
+    struct1[label="<head> struct1:|<f0> left|<f1> mid&#92; dle|<f2> right"];
+    struct2[label="<f0> one|<f1> two"];
+    struct3[label="hello&#92;nworld |{ b |{c|<here> d|e}| f}| g | h"];
+    
+    struct1:f1 -> struct2:f0;
+    struct1:f2 -> struct3:here;
+}
+```
 ### dot 转图形工具（Graphviz）
 <b>参考</b>
 * 能一边写一边看图的在线网站[graphviz Online](http://dreampuf.github.io/GraphvizOnline/#digraph%20G%20%7B%0A%0A%20%20subgraph%20cluster_0%20%7B%0A%20%20%20%20style%3Dfilled%3B%0A%20%20%20%20color%3Dlightgrey%3B%0A%20%20%20%20node%20%5Bstyle%3Dfilled%2Ccolor%3Dwhite%5D%3B%0A%20%20%20%20a0%20-%3E%20a1%20-%3E%20a2%20-%3E%20a3%3B%0A%20%20%20%20label%20%3D%20%22process%20%231%22%3B%0A%20%20%7D%0A%0A%20%20subgraph%20cluster_1%20%7B%0A%20%20%20%20node%20%5Bstyle%3Dfilled%5D%3B%0A%20%20%20%20b0%20-%3E%20b1%20-%3E%20b2%20-%3E%20b3%3B%0A%20%20%20%20label%20%3D%20%22process%20%232%22%3B%0A%20%20%20%20color%3Dblue%0A%20%20%7D%0A%20%20start%20-%3E%20a0%3B%0A%20%20start%20-%3E%20b0%3B%0A%20%20a1%20-%3E%20b3%3B%0A%20%20b2%20-%3E%20a3%3B%0A%20%20a3%20-%3E%20a0%3B%0A%20%20a3%20-%3E%20end%3B%0A%20%20b3%20-%3E%20end%3B%0A%0A%20%20start%20%5Bshape%3DMdiamond%5D%3B%0A%20%20end%20%5Bshape%3DMsquare%5D%3B%0A%7D)
