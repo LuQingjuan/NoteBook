@@ -78,7 +78,36 @@ cat cmake_targets/autotests/log/results_autotests.xml
 | **-X** | gNB线程池配置，n=>无线程                                                 |                     | char [128]             |                                                                                                                                                                |
 
 ### 内部的调用（TBD）
-
+#### 编译
+* /home/jftt/work_jftt/lu/mtc-oai/CMakeLists.txt
+```
+add_executable(nr_dlschsim
+  ${OPENAIR1_DIR}/SIMULATION/NR_PHY/dlschsim.c
+  ${OPENAIR1_DIR}/SIMULATION/NR_PHY/nr_dummy_functions.c
+  ${OPENAIR_DIR}/common/utils/nr/nr_common.c
+  ${T_SOURCE}
+  ${SHLIB_LOADER_SOURCES}
+  )
+target_link_libraries(nr_dlschsim PRIVATE
+  -Wl,--start-group UTIL SIMU PHY_COMMON PHY_NR_COMMON PHY_NR PHY_NR_UE SCHED_NR_LIB CONFIG_LIB MAC_NR_COMMON -Wl,--end-group
+  m pthread ${ATLAS_LIBRARIES} ${T_LIB} ITTI dl
+  )
+target_link_libraries(nr_dlschsim PRIVATE asn1_nr_rrc_hdrs)
+```
+```
+  set(T_SOURCE
+      ${OPENAIR_DIR}/common/utils/T/T_IDs.h
+      ${OPENAIR_DIR}/common/utils/T/T.c
+      ${OPENAIR_DIR}/common/utils/T/local_tracer.c)
+```
+```
+set (SHLIB_LOADER_SOURCES
+  ${OPENAIR_DIR}/common/utils/load_module_shlib.c
+)
+```
+#### 全局变量
+|     |     ||
+| --- | --- | - |
 
 ## nr_dlsim
 ### 手动运行
@@ -187,6 +216,44 @@ cat cmake_targets/autotests/log/results_autotests.xml
 
 
 ### 内部的调用（TBD）
+
+#### 编译
+* /home/jftt/work_jftt/lu/mtc-oai/CMakeLists.txt
+```
+add_executable(nr_dlsim
+  ${OPENAIR1_DIR}/SIMULATION/NR_PHY/dlsim.c
+  ${OPENAIR1_DIR}/SIMULATION/NR_PHY/nr_dummy_functions.c
+  ${OPENAIR_DIR}/common/utils/nr/nr_common.c
+  ${OPENAIR_DIR}/executables/softmodem-common.c
+  ${OPENAIR2_DIR}/RRC/NAS/nas_config.c
+  ${NR_UE_RRC_DIR}/rrc_nsa.c
+  ${NFAPI_USER_DIR}/nfapi.c
+  ${NFAPI_USER_DIR}/gnb_ind_vars.c
+  ${PHY_INTERFACE_DIR}/queue_t.c
+  ${T_SOURCE}
+  ${SHLIB_LOADER_SOURCES}
+  )
+target_link_libraries(nr_dlsim PRIVATE
+  -Wl,--start-group UTIL SIMU SIMU_ETH PHY_COMMON PHY_NR_COMMON PHY_NR PHY_NR_UE SCHED_NR_LIB SCHED_NR_UE_LIB MAC_NR MAC_UE_NR MAC_NR_COMMON nr_rrc CONFIG_LIB L2_NR HASHTABLE x2ap SECU_CN ngap -lz -Wl,--end-group
+  m pthread ${ATLAS_LIBRARIES} ${T_LIB} ITTI ${OPENSSL_LIBRARIES} dl
+  )
+target_link_libraries(nr_dlsim PRIVATE asn1_nr_rrc_hdrs asn1_lte_rrc_hdrs)
+```
+```
+  set(T_SOURCE
+      ${OPENAIR_DIR}/common/utils/T/T_IDs.h
+      ${OPENAIR_DIR}/common/utils/T/T.c
+      ${OPENAIR_DIR}/common/utils/T/local_tracer.c)
+```
+```
+set (SHLIB_LOADER_SOURCES
+  ${OPENAIR_DIR}/common/utils/load_module_shlib.c
+)
+```
+#### 全局变量
+|     |     ||
+| --- | --- | - |
+
 ## nr_pbchsim
 ### 手动运行
 * 命令
@@ -252,6 +319,36 @@ cat cmake_targets/autotests/log/results_autotests.xml
 
 
 ### 内部的调用（TBD）
+#### 编译
+* /home/jftt/work_jftt/lu/mtc-oai/CMakeLists.txt
+```
+add_executable(nr_pbchsim
+  ${OPENAIR1_DIR}/SIMULATION/NR_PHY/pbchsim.c
+  ${OPENAIR1_DIR}/SIMULATION/NR_PHY/nr_dummy_functions.c
+  ${OPENAIR_DIR}/common/utils/nr/nr_common.c
+  ${T_SOURCE}
+  ${SHLIB_LOADER_SOURCES}
+  )
+target_link_libraries(nr_pbchsim PRIVATE
+  -Wl,--start-group UTIL SIMU PHY_COMMON PHY_NR_COMMON PHY_NR PHY_NR_UE SCHED_NR_LIB CONFIG_LIB MAC_NR_COMMON -Wl,--end-group
+  m pthread ${ATLAS_LIBRARIES} ${T_LIB} ITTI dl
+)
+target_link_libraries(nr_pbchsim PRIVATE asn1_nr_rrc_hdrs asn1_lte_rrc_hdrs)
+```
+```
+  set(T_SOURCE
+      ${OPENAIR_DIR}/common/utils/T/T_IDs.h
+      ${OPENAIR_DIR}/common/utils/T/T.c
+      ${OPENAIR_DIR}/common/utils/T/local_tracer.c)
+```
+```
+set (SHLIB_LOADER_SOURCES
+  ${OPENAIR_DIR}/common/utils/load_module_shlib.c
+)
+```
+#### 全局变量
+|     |     ||
+| --- | --- | - |
 ## nr_prachsim
 ### 手动运行
 * 命令
@@ -331,3 +428,51 @@ cat cmake_targets/autotests/log/results_autotests.xml
 | 1.4  | 6       | 72     |
 
 ### 内部的调用（TBD）
+#### 编译
+* /home/jftt/work_jftt/lu/mtc-oai/CMakeLists.txt
+```
+add_executable(nr_prachsim
+  ${OPENAIR1_DIR}/SIMULATION/NR_PHY/prachsim.c
+  ${OPENAIR1_DIR}/SIMULATION/NR_PHY/nr_dummy_functions.c
+  ${OPENAIR_DIR}/common/utils/nr/nr_common.c
+  ${T_SOURCE}
+  ${SHLIB_LOADER_SOURCES})
+target_link_libraries(nr_prachsim PRIVATE
+  -Wl,--start-group UTIL SIMU PHY_COMMON PHY_NR_COMMON PHY_NR PHY_RU PHY_NR_UE MAC_NR_COMMON SCHED_NR_LIB CONFIG_LIB -lz -Wl,--end-group
+  m pthread ${ATLAS_LIBRARIES} ${T_LIB} ITTI ${OPENSSL_LIBRARIES} dl)
+target_link_libraries(nr_prachsim PRIVATE asn1_nr_rrc_hdrs asn1_lte_rrc_hdrs)
+```
+```
+  set(T_SOURCE
+      ${OPENAIR_DIR}/common/utils/T/T_IDs.h
+      ${OPENAIR_DIR}/common/utils/T/T.c
+      ${OPENAIR_DIR}/common/utils/T/local_tracer.c)
+```
+```
+set (SHLIB_LOADER_SOURCES
+  ${OPENAIR_DIR}/common/utils/load_module_shlib.c
+)
+```
+#### 全局变量
+|     |     ||
+| --- | --- | - |
+
+
+
+
+```graphviz
+digraph structs {
+    node[shape=record];
+    graph[rankdir=LR];
+    
+    struct1[label="
+    <f0> left|
+    <f1> mid&#92; dle|
+    <f2> right
+    "];
+    struct2[label="<f0> one|<f1> two"];
+    struct3[label="hello&#92;nworld |{ b |{c|<here> d|e}| f}| g | h"];
+    struct1:f1 -> struct2:f0;
+    struct1:f2 -> struct3:here;
+}
+```

@@ -165,10 +165,10 @@ def analyse(fpin, fpout):
  
     with open(fpin, 'r', encoding='utf-8') as file:
         c_code = file.read()
-    # 定义正则表达式
-    pattern = r'\b[a-zA-Z_]\w*\s*\(' #任意字母下划线加(0-无穷)个字母下划线加无空格
-    matches = re.findall(pattern, c_code)
-    deFunc = [match[:-1].rstrip().lower() for match in matches if match[:-1] not in str]
+        # 定义正则表达式
+        pattern = r'\b[a-zA-Z_]\w*\s*\(' #任意字母下划线加(0-无穷)个字母下划线加无空格
+        matches = re.findall(pattern, c_code)
+        deFunc = [match[:-1].rstrip().lower() for match in matches if match[:-1] not in str]
  
     with open(fpin, 'rb') as file, open(fpout, 'w') as outfile:
         while True:
