@@ -64,3 +64,96 @@ f1sim:/home/jftt/work_jftt/yinc/oai5g_sa/cmake_targets
 cu:/home/jftt/work_jftt/yinc/oai5g_cu/cmake_targets
 
 用的32上的free5gc
+
+
+
+
+
+
+
+
+
+main                                             executables\nr-f1sim.c
+    create_tasks_f1sim
+        nas_nrue_task
+        if(next_Mod_id < (ue_count -1))          openair3\NAS\NR_UE\nr_nas_msg_sim.c
+            nr_ue_rrc_trigger_msg3
+
+
+check_nr_prach
+nr_ue_prach_procedures
+    nr_ue_get_rach
+
+    nr_decode_SI
+
+    nr_rrc_ue_generate_ra_msg
+
+    nr_rrc_ue_decode_NR_BCCH_DL_SCH_Message
+        nr_rrc_ue_generate_RRCSetupRequest
+            do_RRCSetupRequest "RRCSetupRequest Encoded "
+
+```mermaid
+    sequenceDiagram
+    participant  main   as main
+    participant  gtpv1u as gtpv1uTask
+    participant  nas    as nas_nrue_task
+    participant  rrc    as rrc_nrue_task
+    participant  du     as F1AP_DU_task
+    participant  sctp   as sctp_eNB_task
+    participant  cu     as cu
+  
+    activate main
+        Note right of main:                    create_tasks_f1sim()
+        main->>sctp:                           itti_create_task(TASK_SCTP, sctp_eNB_task, NULL) < 0)
+        main->>rrc:                            itti_create_task (TASK_RRC_NRUE, rrc_nrue_task, NULL)
+        main->>nas:                            itti_create_task (TASK_NAS_NRUE, nas_nrue_task, NULL)
+        main->>du:                             itti_create_task(TASK_DU_F1, F1AP_DU_task, NULL)
+        main->>gtpv1u:                         itti_create_task(TASK_GTPV1_U, gtpv1uTask, NULL)
+        Note right of main:                    init_pdcp()
+        main->>du:                             itti_send_msg_to_task (TASK_DU_F1, GNB_MODULE_ID_TO_INSTANCE(0), msg_p);
+    deactivate main
+
+
+    activate du
+        Note right of du:                      case F1AP_SETUP_REQ:
+        du->>sctp:                             itti_send_msg_to_task(TASK_SCTP, instance, message_p);
+    deactivate du
+
+    activate sctp
+        Note right of sctp:                    case SCTP_NEW_ASSOCIATION_REQ:
+    deactivate sctp
+
+
+
+    activate nas
+        Note right of nas:                    case FGS_SECURITY_MODE_COMMAND:
+        Note right of nas:                    nr_ue_rrc_trigger_msg3()
+        nas->>rrc:                            itti_send_msg_to_task(TASK_RRC_NRUE, 0, message_p);
+    deactivate nas
+
+    activate rrc
+        Note right of rrc:                    case RRC_SEND_MSG3:
+        Note right of rrc:                    nr_rrc_ue_generate_RRCSetupRequest()
+        rrc->>du:                              itti_send_msg_to_task(TASK_DU_F1, 0, tmp);
+    deactivate rrc
+
+    activate du
+        Note right of du:                     case F1AP_INITIAL_UL_RRC_MESSAGE:
+        Note right of du:                     DU_send_INITIAL_UL_RRC_MESSAGE_TRANSFER()
+        Note right of du:                     f1ap_itti_send_sctp_data_req()
+        du->>sctp:                            itti_send_msg_to_task(TASK_SCTP, instance, message_p);
+    deactivate du
+
+    activate sctp
+        Note right of sctp:                   case SCTP_DATA_REQ:
+        Note right of sctp:                   sctp_sendmsg()
+    deactivate sctp
+
+
+    activate du
+        Note right of du:                     case NR_RRC_MAC_CCCH_DATA_IND:
+        Note right of du:                     du_task_handle_sctp_data_ind()
+        Note right of du:                     f1ap_handle_message()
+    deactivate du
+```
+rrc_ue_generate_RRCSetupComplete

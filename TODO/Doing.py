@@ -1,5 +1,49 @@
 import re
 
+1、数据类型关键字（12个）
+char
+double
+enum
+float
+int
+long
+short
+signed
+struct
+union
+unsigned
+void
+2、控制语句关键字（12个）：
+A循环语句
+for
+do
+while
+break
+continue
+B条件语句
+if
+else
+goto
+C开关语句
+switch
+case
+default
+D返回语句
+return
+3、存储类型关键字（4个）：
+auto
+extern
+register
+static
+4、其它关键字（4个）：
+const
+sizeof
+typedef
+volatile
+
+
+
+
 class Stack():
     def __init__(self):
         self.data = []
