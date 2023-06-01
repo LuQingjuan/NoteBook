@@ -1,0 +1,390 @@
+diff --git a/Makefile b/Makefile
+index bb6e766..c488ec2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -6,7 +6,10 @@ DOCKER_IMAGE_TAG = 'latest'
+ all: base amf ausf nrf nssf pcf smf udm udr n3iwf upf webconsole
+ 
+ base:
+-       docker build -t ${DOCKER_IMAGE_OWNER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ./base
++       docker build -t ${DOCKER_IMAGE_OWNER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ./base \
++                      --build-arg HTTP_PROXY=http://centos5g:1249124912@10.128.145.88:8080 \
++                       --build-arg HTTPS_PROXY=https://centos5g:1249124912@10.128.145.88:8080 \
++                       --build-arg "NO_PROXY=localhost,127.0.0.1,.example.com"
+        docker image ls ${DOCKER_IMAGE_OWNER}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+ 
+ smf: base
+@@ -14,7 +17,7 @@ smf: base
+ amf: base
+        docker build --build-arg F5GC_MODULE=amf -t ${DOCKER_IMAGE_OWNER}/amf-base:${DOCKER_IMAGE_TAG} -f ./base/Dockerfile.nf ./base
+ upf: base
+-       docker build --build-arg F5GC_MODULE=upf -t ${DOCKER_IMAGE_OWNER}/upf-base:${DOCKER_IMAGE_TAG} -f ./base/Dockerfile.nf ./base
++       docker build --build-arg F5GC_MODULE=upf -t ${DOCKER_IMAGE_OWNER}/upf-base:${DOCKER_IMAGE_TAG} -f ./base/Dockerfile.nf ./base 
+ udr: base
+        docker build --build-arg F5GC_MODULE=udr -t ${DOCKER_IMAGE_OWNER}/udr-base:${DOCKER_IMAGE_TAG} -f ./base/Dockerfile.nf ./base
+ udm: base
+@@ -29,6 +32,5 @@ pcf: base
+        docker build --build-arg F5GC_MODULE=pcf -t ${DOCKER_IMAGE_OWNER}/pcf-base:${DOCKER_IMAGE_TAG} -f ./base/Dockerfile.nf ./base
+ ausf: base
+        docker build --build-arg F5GC_MODULE=ausf -t ${DOCKER_IMAGE_OWNER}/ausf-base:${DOCKER_IMAGE_TAG} -f ./base/Dockerfile.nf ./base
+-
+ webconsole: base
+        docker build -t ${DOCKER_IMAGE_OWNER}/webconsole-base:${DOCKER_IMAGE_TAG} -f ./base/Dockerfile.nf.webconsole ./base
+diff --git a/base/Dockerfile b/base/Dockerfile
+index 4a6834a..14d9c8c 100644
+--- a/base/Dockerfile
++++ b/base/Dockerfile
+@@ -7,15 +7,27 @@ FROM golang:1.17.13-buster AS builder
+ LABEL maintainer="Free5GC <support@free5gc.org>"
+ 
+ ENV DEBIAN_FRONTEND noninteractive
++#ENV http_proxy http://centos5g:1249124912@10.128.145.88:8080
++#ENV https_proxy http://centos5g:1249124912@10.128.145.88:8080
+ 
+ # Install dependencies
+-RUN apt-get update \
++RUN sh -c 'echo "Acquire::http::Proxy \"http://centos5g:1249124912@10.128.145.88:8080\";" >> /etc/apt/apt.conf.d/10proxy' \
++    && sh -c 'echo "Acquire::https::Proxy \"http://centos5g:1249124912@10.128.145.88:8080\";" >> /etc/apt/apt.conf.d/10proxy' \
++    && apt-get update \
+     && apt-get -y install gcc cmake autoconf libtool pkg-config libmnl-dev libyaml-dev apt-transport-https ca-certificates \
+-    && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+-    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
++#    && curl -x http://centos5g:1249124912@10.128.145.88:8080 -sL https://deb.nodesource.com/setup_9.x | bash \
++#    && curl -x http://centos5g:1249124912@10.128.145.88:8080 -sL https://deb.nodesource.com/setup_16.x  -o nodesource_setup.sh \
++#    && sed -i 's/$(lsb_release -c -s)/"stable"/g' nodesource_setup.sh \
++#    && cat nodesource_setup.sh \
++#    && bash nodesource_setup.sh \
++    && wget -q -O - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
++    && sh -c 'echo "deb https://deb.nodesource.com/node_16.x buster main" > /etc/apt/sources.list.d/nodesource.list' \
++    && curl -x http://centos5g:1249124912@10.128.145.88:8080 -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+     && apt-get update \
+     && apt-get install -y nodejs yarn
+ 
++ENV http_proxy " "
++ENV https_proxy " "
+ # Clean apt cache
+ RUN apt-get clean
+diff --git a/base/Dockerfile.nf b/base/Dockerfile.nf
+index d099718..de77575 100644
+--- a/base/Dockerfile.nf
++++ b/base/Dockerfile.nf
+@@ -5,6 +5,8 @@
+ FROM free5gc/base as my-base
+ 
+ ENV DEBIAN_FRONTEND noninteractive
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG F5GC_MODULE
+ 
+ # Get Free5GC
+@@ -27,3 +29,6 @@ COPY --from=my-base /go/src/free5gc/config/* ./config/
+ 
+ # Copy default certificates (not used for now)
+ COPY --from=my-base /go/src/free5gc/config/TLS/* ./config/TLS/
++
++ENV http_proxy " "
++ENV https_proxy " "
+diff --git a/base/Dockerfile.nf.webconsole b/base/Dockerfile.nf.webconsole
+index aca7a4f..7baa060 100644
+--- a/base/Dockerfile.nf.webconsole
++++ b/base/Dockerfile.nf.webconsole
+@@ -5,6 +5,8 @@
+ FROM free5gc/base as my-base
+ 
+ ENV DEBIAN_FRONTEND noninteractive
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ 
+ # Get Free5GC
+ COPY free5gc/ $GOPATH/src/free5gc/
+diff --git a/config/amfcfg.yaml b/config/amfcfg.yaml
+index 018e520..367739a 100644
+--- a/config/amfcfg.yaml
++++ b/config/amfcfg.yaml
+@@ -46,7 +46,7 @@ configuration:
+   security:  # NAS security parameters
+     integrityOrder: # the priority of integrity algorithms
+       - NIA2
+-      # - NIA0
++        #- NIA0
+     cipheringOrder: # the priority of ciphering algorithms
+       - NEA0
+       # - NEA2
+@@ -102,10 +102,10 @@ configuration:
+ # ReportCaller: enable the caller report or not, value: true or false
+ logger:
+   AMF:
+-    debugLevel: info
++    debugLevel: trace
+     ReportCaller: false
+   NAS:
+-    debugLevel: info
++    debugLevel: trace
+     ReportCaller: false
+   FSM:
+     debugLevel: info
+diff --git a/config/nrfcfg.yaml b/config/nrfcfg.yaml
+index d79fd84..aea4f97 100644
+--- a/config/nrfcfg.yaml
++++ b/config/nrfcfg.yaml
+@@ -1,5 +1,5 @@
+ info:
+-  version: 1.0.1
++  version: 1.0.2
+   description: NRF initial local configuration
+ 
+ configuration:
+@@ -10,9 +10,9 @@ configuration:
+     registerIPv4: nrf.free5gc.org # IP used to serve NFs or register to another NRF
+     bindingIPv4: nrf.free5gc.org  # IP used to bind the service
+     port: 8000 # port used to bind the service
+-    tls: # the local path of TLS key
+-      pem: ./config/TLS/nrf.pem # NRF TLS Certificate
+-      key: ./config/TLS/nrf.key # NRF TLS Private key
++    # cert: config/cert/nrf.pem # NRF Certificate
++    # rootcert: config/cert/root.pem # Root Certificate
++    # oauth: false # OAuth2
+   DefaultPlmnId:
+     mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+     mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+diff --git a/docker-compose-build.yaml b/docker-compose-build.yaml
+index 04419c3..dd9c6b9 100644
+--- a/docker-compose-build.yaml
++++ b/docker-compose-build.yaml
+@@ -197,69 +197,6 @@ services:
+       - db
+       - free5gc-nrf
+ 
+-  free5gc-n3iwf:
+-    container_name: n3iwf
+-    build:
+-      context: ./nf_n3iwf
+-      args:
+-        DEBUG_TOOLS: "false"
+-    command: sh -c "./n3iwf-ipsec.sh && ./n3iwf -c ./config/n3iwfcfg.yaml"
+-    volumes:
+-      - ./config/n3iwfcfg.yaml:/free5gc/config/n3iwfcfg.yaml
+-      - ./config/n3iwf-ipsec.sh:/free5gc/n3iwf-ipsec.sh
+-    environment:
+-      GIN_MODE: release
+-    cap_add:
+-      - NET_ADMIN
+-    networks:
+-      privnet:
+-        aliases:
+-          - n3iwf.free5gc.org
+-    depends_on:
+-      - free5gc-amf
+-      - free5gc-smf
+-      - free5gc-upf
+-
+-  free5gc-webui:
+-    container_name: webui
+-    build:
+-      context: ./webui
+-      args:
+-        DEBUG_TOOLS: "false"
+-    command: ./webui -c ./config/webuicfg.yaml
+-    volumes:
+-      - ./config/webuicfg.yaml:/free5gc/config/webuicfg.yaml
+-    environment:
+-      - GIN_MODE=release
+-    networks:
+-      privnet:
+-        aliases:
+-          - webui
+-    ports:
+-      - "5000:5000"
+-    depends_on:
+-      - db
+-
+-  ueransim:
+-    container_name: ueransim
+-    build:
+-      context: ./ueransim
+-    command: ./nr-gnb -c ./config/gnbcfg.yaml
+-    volumes:
+-      - ./config/gnbcfg.yaml:/ueransim/config/gnbcfg.yaml
+-      - ./config/uecfg.yaml:/ueransim/config/uecfg.yaml
+-    cap_add:
+-      - NET_ADMIN
+-    devices:
+-      - "/dev/net/tun"
+-    networks:
+-      privnet:
+-        aliases:
+-          - gnb.free5gc.org
+-    depends_on:
+-      - free5gc-amf
+-      - free5gc-upf
+-
+ networks:
+   privnet:
+     ipam:
+diff --git a/nf_amf/Dockerfile b/nf_amf/Dockerfile
+index 68034d8..e9bf5eb 100644
+--- a/nf_amf/Dockerfile
++++ b/nf_amf/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE amf
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_ausf/Dockerfile b/nf_ausf/Dockerfile
+index e68d460..221d766 100644
+--- a/nf_ausf/Dockerfile
++++ b/nf_ausf/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE ausf
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_n3iwf/Dockerfile b/nf_n3iwf/Dockerfile
+index 9c94bf6..55ec815 100644
+--- a/nf_n3iwf/Dockerfile
++++ b/nf_n3iwf/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE n3iwf
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_nrf/Dockerfile b/nf_nrf/Dockerfile
+index 3e663fa..9735d15 100644
+--- a/nf_nrf/Dockerfile
++++ b/nf_nrf/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE nrf
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_nssf/Dockerfile b/nf_nssf/Dockerfile
+index 822a652..657dd69 100644
+--- a/nf_nssf/Dockerfile
++++ b/nf_nssf/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE nssf
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_pcf/Dockerfile b/nf_pcf/Dockerfile
+index 175d732..a1705c7 100644
+--- a/nf_pcf/Dockerfile
++++ b/nf_pcf/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE pcf
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_smf/Dockerfile b/nf_smf/Dockerfile
+index 1e14446..cf8023a 100644
+--- a/nf_smf/Dockerfile
++++ b/nf_smf/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE smf
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_udm/Dockerfile b/nf_udm/Dockerfile
+index 470d485..a8ad097 100644
+--- a/nf_udm/Dockerfile
++++ b/nf_udm/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE udm
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_udr/Dockerfile b/nf_udr/Dockerfile
+index 2e151de..58e1051 100644
+--- a/nf_udr/Dockerfile
++++ b/nf_udr/Dockerfile
+@@ -5,6 +5,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+     version="Stage 3"
+ 
+ ENV F5GC_MODULE udr
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+diff --git a/nf_upf/Dockerfile b/nf_upf/Dockerfile
+index 036bcb8..dd8880b 100644
+--- a/nf_upf/Dockerfile
++++ b/nf_upf/Dockerfile
+@@ -1,5 +1,8 @@
+ FROM free5gc/base as my-base
+ 
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
++
+ RUN git clone https://github.com/free5gc/go-gtp5gnl.git && mkdir "go-gtp5gnl/bin" && \
+     cd "go-gtp5gnl/cmd/gogtp5g-tunnel" &&  go build -o "${GOPATH}/gtp5g-tunnel" . && \
+     cd -
+@@ -17,6 +20,9 @@ ARG DEBUG_TOOLS
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)
+ RUN if [ "$DEBUG_TOOLS" = "true" ] ; then apt-get update && apt-get install -y vim strace net-tools iputils-ping curl netcat ; fi
+ 
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
++
+ # Install UPF dependencies
+ RUN apt-get update \
+     && apt-get install -y libmnl0 libyaml-0-2 iproute2 iptables \
+diff --git a/ueransim/Dockerfile b/ueransim/Dockerfile
+index 43a86a2..e74e870 100644
+--- a/ueransim/Dockerfile
++++ b/ueransim/Dockerfile
+@@ -3,6 +3,8 @@ FROM gcc:9.4.0 AS builder
+ LABEL maintainer="Free5GC <support@free5gc.org>"
+ 
+ ENV DEBIAN_FRONTEND noninteractive
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ 
+ # Install dependencies
+ RUN apt-get update \
+diff --git a/webui/Dockerfile b/webui/Dockerfile
+index 41bc49a..5588f8f 100644
+--- a/webui/Dockerfile
++++ b/webui/Dockerfile
+@@ -6,6 +6,8 @@ LABEL description="Free5GC open source 5G Core Network" \
+ 
+ ENV F5GC_MODULE webui
+ ENV DEBIAN_FRONTEND noninteractive
++ENV http_proxy http://local5gst:0123456789@10.128.145.88:8080
++ENV https_proxy http://local5gst:0123456789@10.128.145.88:8080
+ ARG DEBUG_TOOLS
+ 
+ # Install debug tools ~ 100MB (if DEBUG_TOOLS is set to true)

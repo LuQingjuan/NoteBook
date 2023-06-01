@@ -42,21 +42,6 @@ typedef
 volatile
 '''
 
-
-class Stack():
-    def __init__(self):
-        self.data = []
-        self.len = 0
-    def pop(self):
-        if self.len>0:
-            self.len-=1
-            return self.data.pop()
-        else:
-            return None
-    def push(self, value):
-        self.data.append(value)
-        self.len+=1
-
 MAX = 22  # 分析符号表的最大容量
 RES_MAX = 10  # 关键字的最大长度
 MAXBUF = 255  # 缓冲区的大小
@@ -432,21 +417,113 @@ def analyse(fpin, fpout):
             else:
                 outfile.write("在第{}行无法识别的字符\t{}\n".format(Line_NO, ch))
 
+
+class Stack():
+    def __init__(self):
+        self.data = []
+        self.len = 0
+
+    def pop(self):
+        if self.len > 0:
+            self.len -= 1
+            return self.data.pop()
+        else:
+            return None
+
+    def push(self, value):
+        self.data.append(value)
+        self.len += 1
+
+def analyse_group(key_list):
+    sentences = []
+    #sentences.insert(0,data)
+    group = Stack()
+    for data in key_list:
+        if data in ['}',')',']',';']:
+            tmp_data = group.pop()
+            while None != tmp_data:
+                pass
+        if ';' == data:
+            tmp_group = Stack()
+            while None != tmp_data and ';' != tmp_data:
+                tmp_data = group.pop()
+
+        elif data in ['{','(','[']:
+            pass
+        else:
+            group.push(data)
+
 def analyse_new(fpin):
     with open(fpin, 'r', encoding='utf-8') as file:
         sentences = re.split(r"([^a-zA-Z0-9_])", file.read())
         for item in sentences[:]:
             if '' == item:
                 sentences.remove(item)
-        #print(sentences)
+    #print(sentences)
 
+    sub = Stack()
+    id = 0
+    flag = ''
+    start_id = -1
+    end_id = -1
+    new_sentences = []
+    group = Stack()
     while id < len(sentences):
-        if '"' == sentences[id]:
-            id += 1
-            while id < len(sentences) and '\\' != sentences[id-1] '"' != sentences[id]:
-                id += 1
-            id += 1
-        elif '\'' == sentences[id]:
+        if '/*' == flag:
+            # /*    */
+            if '\\' != sentences[id-2] and '*' == sentences[id-1] and '/' == sentences[id]:
+                end_id = id
+        elif '//' == flag:
+            # //    \n
+            if '\\' != sentences[id-1] and '\n' == sentences[id]:
+                end_id = id
+        elif '"' == flag:
+            # "    "
+            if '\\' != sentences[id-1] and '"' == sentences[id]:
+                end_id = id
+        elif '\'' == flag:
+            # '    '
+            if '\\' != sentences[id-1] and '\'' == sentences[id]:
+                end_id = id
+        else:
+            # 查找特殊字符
+            if '*' == sentences[id]:
+                # /*
+                if (1 == id and '/' == sentences[id-1]) or (id > 1 and '\\' != sentences[id-2] and '/' == sentences[id-1]):
+                    start_id = id-1
+                    flag = ''.join(sentences[start_id:start_id+2])
+            elif '/' == sentences[id]:
+                # //
+                if (1 == id and '/' == sentences[id-1]) or (id > 1 and '\\' != sentences[id-2] and '/' == sentences[id-1]):
+                    start_id = id-1
+                    flag = ''.join(sentences[start_id:start_id+2])
+            elif '"' == sentences[id]:
+                # "
+                if (0 == id) or (id > 0 and '\\' != sentences[id-1]):
+                    start_id = id
+                    flag = '"'
+            elif '\'' == sentences[id]:
+                # '
+                if (0 == id) or (id > 0 and '\\' != sentences[id-1]):
+                    start_id = id
+                    flag = '\''
+                    
+            else:
+                if sentences[id] not in [' ','\t','\r','\n']:
+                    new_sentences.append(sentences[id])
+
+        if end_id > 0:
+            # 特殊字符结束
+            new_sentences.append(''.join(sentences[start_id:end_id+1]))
+            print(''.join(sentences[start_id:end_id+1]))
+            flag = ''
+            start_id = -1
+            end_id = -1
+
+        id += 1
+    print(new_sentences)
+    analyse_group(new_sentences)
+'''        elif '\'' == sentences[id]:
             id += 1
             while id < len(sentences) and '\\' != sentences[id-1] '\'' != sentences[id]:
                 id += 1
@@ -459,12 +536,39 @@ def analyse_new(fpin):
         elif '' == sentences[id]:
         id += 1
     #with open(fpin, 'rb') as file, open(fpout, 'w') as outfile:
-
+'''
 init()
 fpin = r"hello.c"
 fpout = r"data1.txt"
-analyse_new(fpin, fpout)
+analyse_new(fpin)
+arr = ['a','b','c','d']
+str1 = ''.join(arr[2:3])
+print(str1)
 
+'''
+import os
+from datetime import datetime
+
+code = Source(fpin)
+code.analyse()
+
+ctime = os.path.getctime(fpin) #创建时间
+ctime_string = datetime.fromtimestamp(int(ctime))
+ 
+mtime = os.path.getmtime(fpin) #修改时间
+mtime_string = datetime.fromtimestamp(int(ctime))
+ 
+atime = os.path.getatime(fpin) #访问时间
+atime_string = datetime.fromtimestamp(int(ctime))
+ 
+print(
+    f"创建时间：{ctime_string}", 
+    f"修改时间：{mtime_string}", 
+    f"访问时间：{atime_string}", 
+    sep="\n"
+)
+ 
+ 
 
 s=Stack()
 s.push({"AAA",1})
@@ -477,3 +581,4 @@ print(s.pop())
 print(s.pop())
 print(s.pop())
 print(s.pop())
+'''
