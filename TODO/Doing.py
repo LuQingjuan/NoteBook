@@ -435,23 +435,40 @@ class Stack():
         self.len += 1
 
 def analyse_group(key_list):
-    sentences = []
     #sentences.insert(0,data)
     group = Stack()
     for data in key_list:
         if data in ['}',')',']',';']:
-            tmp_data = group.pop()
-            while None != tmp_data:
-                pass
-        if ';' == data:
-            tmp_group = Stack()
-            while None != tmp_data and ';' != tmp_data:
-                tmp_data = group.pop()
+            if '}' == data:
+                flag = '{'
+            elif ')' == data:
+                flag = '('
+            elif ']' == data:
+                flag = '['
+            elif ';' == data:
+                flag = ';'
 
-        elif data in ['{','(','[']:
-            pass
+            sentence = []
+            tmp_data = data
+            sentence.insert(1,tmp_data)
+            while None != tmp_data:
+                tmp_data = group.pop()
+                sentence.insert(0,tmp_data)
+                if flag == tmp_data:
+                    break
+            group.push(sentence)
         else:
             group.push(data)
+    print(group.data)
+    #show("",group.data)
+
+def show(flag,datas):
+    if isinstance(datas,list):
+        for data in datas:
+            flag += "    "
+            show(flag, data)
+    else:
+        print(flag+str(datas))
 
 def analyse_new(fpin):
     with open(fpin, 'r', encoding='utf-8') as file:
@@ -521,7 +538,7 @@ def analyse_new(fpin):
             end_id = -1
 
         id += 1
-    print(new_sentences)
+    #print(new_sentences)
     analyse_group(new_sentences)
 '''        elif '\'' == sentences[id]:
             id += 1
