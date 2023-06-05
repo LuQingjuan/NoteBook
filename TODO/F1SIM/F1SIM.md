@@ -113,59 +113,31 @@ f1sim:
 >$ sudo tcpdump -i lo: -w du.pcap
 
 
+1 UE 0.44592500
+70	2023-06-02 22:27:07.697411	10.100.200.1	10.100.200.8	NGAP/NAS-5GS	146	InitialUEMessage, Registration request
+204	2023-06-02 22:27:07.703248	10.100.200.8	10.100.200.1	NGAP/NAS-5GS	150	DownlinkNASTransport, Authentication request
+207	2023-06-02 22:27:07.703896	10.100.200.1	10.100.200.8	NGAP/NAS-5GS	146	UplinkNASTransport, Authentication response
+268	2023-06-02 22:27:07.706092	10.100.200.8	10.100.200.1	NGAP/NAS-5GS	134	DownlinkNASTransport, Security mode command
+269	2023-06-02 22:27:07.706365	10.100.200.1	10.100.200.8	NGAP/NAS-5GS	178	UplinkNASTransport
+553	2023-06-02 22:27:07.717754	10.100.200.8	10.100.200.1	NGAP/NAS-5GS	258	InitialContextSetupRequest
+558	2023-06-02 22:27:07.718339	10.100.200.1	10.100.200.8	NGAP	538	UERadioCapabilityInfoIndication
+562	2023-06-02 22:27:07.921141	10.100.200.1	10.100.200.8	NGAP	86	InitialContextSetupResponse
+564	2023-06-02 22:27:08.125113	10.100.200.1	10.100.200.8	NGAP/NAS-5GS	226	UplinkNASTransport
+876	2023-06-02 22:27:08.140587	10.100.200.8	10.100.200.1	NGAP/NAS-5GS	250	PDUSessionResourceSetupRequest
+883	2023-06-02 22:27:08.143336	10.100.200.1	10.100.200.8	NGAP	122	PDUSessionResourceSetupResponse
 
+50 UE 5.60426300
+13		2023-06-02 22:32:57.296905	10.100.200.1	10.100.200.8	NGAP/NAS-5GS	146	InitialUEMessage, Registration request
+46265	2023-06-02 22:33:02.901168	10.100.200.1	10.100.200.8	NGAP	106	PDUSessionResourceSetupResponse
 
-cat /proc/sys/net/core/rmem_max    
-cat /proc/sys/net/core/wmem_max    
-cat /proc/sys/net/core/rmem_default
-cat /proc/sys/net/core/wmem_default 
-
-* 收缓冲区最大值 echo 65536 > /proc/sys/net/core/rmem_max    
-* 发缓冲区最大值 echo 300000> /proc/sys/net/core/wmem_max    
-* 收缓冲区默认值 echo 65536 > /proc/sys/net/core/rmem_default
-* 发缓冲区默认值 echo 65536 > /proc/sys/net/core/wmen_default
-
-jftt@jftt-pc:~/work_jftt/xues/free5gc-compose$ cat /proc/sys/net/core/rmem_max    
-50000000
-jftt@jftt-pc:~/work_jftt/xues/free5gc-compose$ cat /proc/sys/net/core/wmem_max    
-1048576
-jftt@jftt-pc:~/work_jftt/xues/free5gc-compose$ cat /proc/sys/net/core/rmem_default
-212992
-jftt@jftt-pc:~/work_jftt/xues/free5gc-compose$ cat /proc/sys/net/core/wmem_default 
-212992
-jftt@jftt-pc:~/work_jftt/xues/free5gc-compose$ 
-
-
-* 收缓冲区默认值 sudo echo 1048576 > /proc/sys/net/core/rmem_default
-* 发缓冲区默认值 echo 1048576 > /proc/sys/net/core/wmen_default
-————————————————
-版权声明：本文为CSDN博主「芝麻馅汤圆儿」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/weixin_57632548/article/details/127576692
+100 UE 10.84294500
+13		2023-06-02 22:24:09.702239	10.100.200.1	10.100.200.8	NGAP/NAS-5GS	146	InitialUEMessage, Registration request
+92511	2023-06-02 22:24:20.545184	10.100.200.1	10.100.200.8	NGAP	106	PDUSessionResourceSetupResponse
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-0.3s/2
-90374.366476 [NR_RRC] E [UE] RRCSetupRequest Encoded 48 bits (6 bytes)
-90374.652364 [NAS] E Received PDU Session Establishment Accept, UE IP: 10.60.0.155
-
-17s/50
-89385.076683 [NR_RRC] E [UE] RRCSetupRequest Encoded 48 bits (6 bytes)
-89402.634346 [NAS] E Received PDU Session Establishment Accept, UE IP: 10.60.0.52
-
-35s/55
-90424.573762 [NR_RRC] E [UE] RRCSetupRequest Encoded 48 bits (6 bytes)
-90459.045152 [NAS] E Received PDU Session Establishment Accept, UE IP: 10.60.0.210
 
 
 main                                             executables\nr-f1sim.c

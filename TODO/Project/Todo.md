@@ -2,6 +2,18 @@
 ### 环境
 ![[Environment]]
 
+任意语种翻译网站/APP
+
+https://www.deepl.com/translator
+https://regexper.com/#abc
+https://github.com/Fireplusplus/Project
+https://www.runoob.com/linux/linux-comm-awk.html
+http://c.biancheng.net/
+
+https://www.3gpp.org/ftp/Specs/2017-03/Rel-14/36_series/
+
+
+
 ### L1 SIM 调查与强化**
 dlschsim, dlsim, pbchsim, prachsim
 

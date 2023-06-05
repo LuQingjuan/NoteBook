@@ -81,7 +81,6 @@ m：实例类
     * Z
 * 加速计算 Accelerated Computing
   * 加速计算实例使用硬件加速器或协同处理器来执行浮点数计算、图形处理或数据模式匹配等功能，比使用在 CPU 上运行的软件更高效。
-  * 这些实例适用于
 * 存储优化 Storage Optimized
   * 对本地存储上的大型数据集进行高速连续读写访问的工作负载。
   * 它们经过了优化，每秒可以向应用程序交付数以万计的低延迟、随机 I/O 操作 (IOPS)。
@@ -95,7 +94,7 @@ m：实例类
     * I
     * G
     * H
-* HPC优化（高性能计算优化）
+* HPC Optimized（高性能计算优化）
   * 高性能计算（HPC）实例专为在 AWS 上大规模运行 HPC 工作负载提供最佳性价比而构建。HPC 实例特别适用于从高性能处理器（如大型复杂模拟和深度学习工作负载）中受益的应用程序。
 * 实例特征  Instance Features
 * 衡量实例性能  Measuring Instances Performance
@@ -118,16 +117,16 @@ m：实例类
 
 ### 采购选项
 
-| Type                  |                  | 工作负载           | discount |                                                                          | Use Case           |                                                                                                                               |     |
-| --------------------- | ---------------- | ------------------ | -------- | ------------------------------------------------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- | --- |
-| On Deemand            | 按需实例         | 短期               | 100%     | 可预测的定价<br>按秒支付                                                 |                    | coming and staying in resort whenever we like, we pay the full price                                                          |
-| Reserved              | 保留实例         | 长期 (1 & 3 years) | 72%      |                                                                          | 要长时间运行数据库 | like planning ahead and if we plan to stay for a long time, we may get a good discount.                                       |
-| Convertible Reserved  | 可转换的保留实例 | 长期 (1 & 3 years) | 66%      | 随时间推移改变                                                           |                    |
+| Type                  |                  | 工作负载           | discount |                                                                            | Use Case           |                                                                                                                               |
+| --------------------- | ---------------- | ------------------ | -------- | -------------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| On Deemand            | 按需实例         | 短期               | 100%     | 可预测的定价<br>按秒支付                                                   |                    | coming and staying in resort whenever we like, we pay the full price                                                          |
+| Reserved              | 保留实例         | 长期 (1 & 3 years) | 72%      |                                                                            | 要长时间运行数据库 | like planning ahead and if we plan to stay for a long time, we may get a good discount.                                       |
+| Convertible Reserved  | 可转换的保留实例 | 长期 (1 & 3 years) | 66%      | 随时间推移改变                                                             |                    |
 | Savings Plans         | 储蓄计划         | 长期(1 & 3 years)  | 72%      | 它们更加现代化，为不是承诺特定的实例类型，而是承诺以美元为单位的特定使用量 |                    | pay a certain amount per hour for certain period and stay in any room type (e.g.，King, Suite, Sea View，...)                 |
-| Spot Instances        | 现货实例         | 非常短             | 90%      | 非常非常便宜<br>可靠性差:随时都可能丢失这些实例                          |                    | the hotel allows people to bid for the empty rooms and the highest bidder keeps the rooms. You can get kicked out at any time |
-| Dedicated Hosts       | 专用主机         |                    | 最昂贵   | 最贵<br>整个物理服务器<br>控制实例位置                                   |                    | We book an entire building of the resort                                                                                      |
-| Dedicated Instances   | 专用实例         |                    |          | 没有其他客户会共享您的硬件                                               |                    |
-| Capacity Reservations | 容量预存         |                    |          | 在特定AZ中为任何持续时间预留容量                                         |                    | you book a room for a period with full price even you don’t stay in it                                                        |
+| Spot Instances        | 现货实例         | 非常短             | 90%      | 非常非常便宜<br>可靠性差:随时都可能丢失这些实例                            |                    | the hotel allows people to bid for the empty rooms and the highest bidder keeps the rooms. You can get kicked out at any time |
+| Dedicated Hosts       | 专用主机         |                    | 最昂贵   | 最贵<br>整个物理服务器<br>控制实例位置                                     |                    | We book an entire building of the resort                                                                                      |
+| Dedicated Instances   | 专用实例         |                    |          | 没有其他客户会共享您的硬件                                                 |                    |
+| Capacity Reservations | 容量预存         |                    |          | 在特定AZ中为任何持续时间预留容量                                           |                    | you book a room for a period with full price even you don’t stay in it                                                        |
 
 
 #### On Demand（按需实例 | 短期）
